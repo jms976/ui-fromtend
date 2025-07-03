@@ -42,9 +42,9 @@ export default function BoxPages() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 p-4 h-full overflow-auto">
+    <div className="flex flex-col gap-4 h-full overflow-auto">
       <div className="h-9">
-        <h1 className="text-4xl font-bold">BOX LAYOUT</h1>
+        <h1 className="text-4xl font-bold">IN BOX LAYOUT</h1>
       </div>
       <Switch defaultChecked />
       <Switch variant="secondary" defaultChecked />
