@@ -30,6 +30,13 @@ import {
   MultiSelect,
   useConfirmDialog,
   ConfirmAlertDialog,
+  NavigationMenuRoot,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  navigationMenuTriggerStyle,
 } from '@common/ui';
 import {
   ArrowLeftIcon,
@@ -164,6 +171,27 @@ export default function Page() {
       <div className="flex items-center justify-center min-h-svh" ref={wrapperRef}>
         <div className="flex flex-col items-center justify-center gap-4 p-4">
           <h1 className="text-4xl font-bold">FLEX LAYOUT</h1>
+          <NavigationMenuRoot>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <NavigationMenuLink href="#">Link One</NavigationMenuLink>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Item Two</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <NavigationMenuLink href="#">Link Two</NavigationMenuLink>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink href="#" className={navigationMenuTriggerStyle()}>
+                  Item Three
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenuRoot>
           <input type="datetime-local" />
           <Button
             onClick={() =>

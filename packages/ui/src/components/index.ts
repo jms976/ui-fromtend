@@ -202,3 +202,15 @@ export {
   SidebarCollasibleGroup,
   useSidebar,
 } from './Sidebar';
+
+export {
+  NavigationMenuRoot,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+  navigationMenuTriggerStyle,
+} from './NavigationMenu';
