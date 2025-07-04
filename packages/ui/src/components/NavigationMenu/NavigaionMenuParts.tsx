@@ -61,10 +61,9 @@ const navigationMenuTriggerStyle = tv({
     'text-sm font-medium',
 
     // Background & Text color
-    'bg-juiBackground-default',
-    'hover:bg-current/10 hover:text-juiText-primary',
-    'focus:bg-current/10 focus:text-juiText-primary',
-    'data-[state=open]:bg-current/50 data-[state=open]:text-juiText-secondary data-[state=open]:hover:bg-current/10 data-[state=open]:focus:text-juiText-primary',
+    'hover:bg-current/10! hover:text-juiText-primary!',
+    'focus:bg-current/10! focus:text-juiText-primary!',
+    'data-[state=open]:bg-current/5 data-[state=open]:text-current/90',
 
     // Disabled state
     'disabled:pointer-events-none disabled:opacity-50',
@@ -122,17 +121,16 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
         'data-[orientation=vertical]:data-[motion=to-end]:slide-out-to-bottom-30',
 
         // ───────────── Layout ─────────────
-        // ─── Positioning & Style ───
-        'absolute w-auto top-full left-0 p-2 pr-2.5',
+        'absolute w-auto top-full left-0 p-2 pr-2.5 mt-1.5',
         'data-[orientation=vertical]:left-full data-[orientation=vertical]:top-0',
-        'mt-1.5',
         'overflow-hidden',
         'rounded-md',
-        'border',
+        'border border-juiBorder-primary',
         'shadow',
+        'z-10',
         'duration-200',
 
-        // ───────────── group-data (viewport=false) ─────────────
+        // ───────────── group-data ─────────────
         'bg-juiBackground-default',
         'text-juiText-primary',
 
@@ -148,7 +146,6 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
         '**:data-[slot=navigation-menu-link]:focus:ring-0',
         '**:data-[slot=navigation-menu-link]:focus:outline-none',
 
-        // ───────────── External Class Prop ─────────────
         className,
       )}
       {...props}
@@ -163,7 +160,7 @@ function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof
       className={cn(
         // Layout
         'flex flex-col gap-1',
-        'rounded-sm p-2',
+        'rounded-sm p-1',
 
         // Typography
         'text-sm',
@@ -175,15 +172,13 @@ function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof
         'transition-all',
 
         // Hover & Focus
-        'hover:bg-juiBackground-input',
-        'hover:text-juiText-secondary',
-        'focus:bg-juiBackground-input',
-        'focus:text-juiText-secondary',
+        'hover:bg-current/10!',
+        'focus:bg-juiPrimary/30!',
         'outline-none',
         'focus-visible:ring-2 focus-visible:ring-juiFocus-ring',
 
         // Active state
-        'data-[active=true]:bg-juiBackground-input/50',
+        'data-[active=true]:bg-juiPrimary/30!',
         'data-[active=true]:text-juiText-secondary',
 
         // SVG styling
