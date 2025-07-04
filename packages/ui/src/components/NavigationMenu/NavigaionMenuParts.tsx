@@ -2,21 +2,19 @@ import * as React from 'react';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
 import { tv } from 'tailwind-variants';
 
-import { cn } from '../../lib/utils';
 import { ChevronDownIcon } from '@common/ui/icons';
+import { cn } from '../../lib/utils';
 
 function NavigationMenuRoot({
   className,
   children,
-  viewport = true,
+  orientation = 'horizontal',
   ...props
-}: React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {
-  viewport?: boolean;
-}) {
+}: React.ComponentProps<typeof NavigationMenuPrimitive.Root>) {
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
-      data-viewport={viewport}
+      orientation={orientation}
       className={cn(
         // Layout
         'group/navigation-menu',
@@ -26,7 +24,6 @@ function NavigationMenuRoot({
       )}
       {...props}>
       {children}
-      {viewport && <NavigationMenuViewport />}
     </NavigationMenuPrimitive.Root>
   );
 }
@@ -37,8 +34,8 @@ function NavigationMenuList({ className, ...props }: React.ComponentProps<typeof
       data-slot="navigation-menu-list"
       className={cn(
         // Layout
-        'group flex flex-1 list-none items-center justify-center',
-        'space-x-1',
+        'group flex flex-1 list-none items-center justify-center gap-1',
+        'data-[orientation=vertical]:flex-col',
         className,
       )}
       {...props}
@@ -54,36 +51,29 @@ function NavigationMenuItem({ className, ...props }: React.ComponentProps<typeof
 
 const navigationMenuTriggerStyle = tv({
   base: [
-    // Layout
-    'group inline-flex items-center justify-center',
-    'h-10 w-max px-4 py-2',
+    // Layout & Box Model
+    'group inline-flex h-9 w-max items-center justify-center px-4 py-2',
+
+    // Border & Radius
     'rounded-md',
 
     // Typography
     'text-sm font-medium',
 
-    // Colors
+    // Background & Text color
     'bg-juiBackground-default',
-    'text-juiText-primary',
+    'hover:bg-current/10 hover:text-juiText-primary',
+    'focus:bg-current/10 focus:text-juiText-primary',
+    'data-[state=open]:bg-current/50 data-[state=open]:text-juiText-secondary data-[state=open]:hover:bg-current/10 data-[state=open]:focus:text-juiText-primary',
 
-    // Transitions
-    'transition-colors',
+    // Disabled state
+    'disabled:pointer-events-none disabled:opacity-50',
 
-    // Hover & Focus
-    'hover:bg-juiBackground-input',
-    'hover:text-juiText-secondary',
-    'focus:bg-juiBackground-input',
-    'focus:text-juiText-secondary',
-    'focus:outline-none',
-    'focus-visible:ring-2 focus-visible:ring-juiFocus-ring',
+    // Focus styles
+    'focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-1',
 
-    // Disabled
-    'disabled:pointer-events-none',
-    'disabled:opacity-50',
-
-    // Data states
-    'data-[active]:bg-juiBackground-input/50',
-    'data-[state=open]:bg-juiBackground-input/50',
+    // Behavior & Transition
+    'outline-none transition-[color,box-shadow]',
   ],
 });
 
@@ -111,86 +101,58 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
       className={cn(
-        // Layout & Positioning
-        'absolute left-0 top-0 w-full',
-        'md:relative md:w-auto',
-        'p-2 pr-2.5',
+        // ───────────── Motion (Slide/Fade) ─────────────
+        'data-[orientation=horizontal]:data-[motion^=from-]:animate-in',
+        'data-[orientation=horizontal]:data-[motion^=to-]:animate-out',
+        'data-[orientation=horizontal]:data-[motion^=from-]:fade-in',
+        'data-[orientation=horizontal]:data-[motion^=to-]:fade-out',
+        'data-[orientation=horizontal]:data-[motion=from-end]:slide-in-from-right-52',
+        'data-[orientation=horizontal]:data-[motion=from-start]:slide-in-from-left-52',
+        'data-[orientation=horizontal]:data-[motion=to-end]:slide-out-to-right-52',
+        'data-[orientation=horizontal]:data-[motion=to-start]:slide-out-to-left-52',
 
-        // Animations
-        'data-[motion^=from-]:animate-in',
-        'data-[motion^=to-]:animate-out',
-        'data-[motion^=from-]:fade-in',
-        'data-[motion^=to-]:fade-out',
-        'data-[motion=from-end]:slide-in-from-right-52',
-        'data-[motion=from-start]:slide-in-from-left-52',
-        'data-[motion=to-end]:slide-out-to-right-52',
-        'data-[motion=to-start]:slide-out-to-left-52',
+        // ─── vertical 전용 motion
+        'data-[orientation=vertical]:data-[motion^=from-]:animate-in',
+        'data-[orientation=vertical]:data-[motion^=to-]:animate-out',
+        'data-[orientation=vertical]:data-[motion^=from-]:fade-in',
+        'data-[orientation=vertical]:data-[motion^=to-]:fade-out',
+        'data-[orientation=vertical]:data-[motion=from-start]:slide-in-from-top-30',
+        'data-[orientation=vertical]:data-[motion=from-end]:slide-in-from-bottom-30',
+        'data-[orientation=vertical]:data-[motion=to-start]:slide-out-to-top-30',
+        'data-[orientation=vertical]:data-[motion=to-end]:slide-out-to-bottom-30',
 
-        // Viewport specific styles (when viewport=false)
-        'group-data-[viewport=false]/navigation-menu:bg-juiBackground-popover',
-        'group-data-[viewport=false]/navigation-menu:text-juiText-popover-foreground',
-        'group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in',
-        'group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out',
-        'group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95',
-        'group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95',
-        'group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0',
-        'group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0',
-        'group-data-[viewport=false]/navigation-menu:top-full',
-        'group-data-[viewport=false]/navigation-menu:mt-1.5',
-        'group-data-[viewport=false]/navigation-menu:overflow-hidden',
-        'group-data-[viewport=false]/navigation-menu:rounded-md',
-        'group-data-[viewport=false]/navigation-menu:border',
-        'group-data-[viewport=false]/navigation-menu:border-juiBorder-primary',
-        'group-data-[viewport=false]/navigation-menu:shadow-lg',
-        'group-data-[viewport=false]/navigation-menu:duration-200',
+        // ───────────── Layout ─────────────
+        // ─── Positioning & Style ───
+        'absolute w-auto top-full left-0 p-2 pr-2.5',
+        'data-[orientation=vertical]:left-full data-[orientation=vertical]:top-0',
+        'mt-1.5',
+        'overflow-hidden',
+        'rounded-md',
+        'border',
+        'shadow',
+        'duration-200',
 
-        // Link specific styles within content
-        '[&_a[data-slot=navigation-menu-link]]:focus:ring-0',
-        '[&_a[data-slot=navigation-menu-link]]:focus:outline-none',
+        // ───────────── group-data (viewport=false) ─────────────
+        'bg-juiBackground-default',
+        'text-juiText-primary',
+
+        // ─── Animate In/Out ───
+        'group/navigation-menu:data-[state=open]:animate-in',
+        'data-[state=closed]:animate-out',
+        'data-[state=closed]:zoom-out-95',
+        'data-[state=open]:zoom-in-95',
+        'data-[state=open]:fade-in-0',
+        'data-[state=closed]:fade-out-0',
+
+        // ───────────── Focus Reset (slot targets) ─────────────
+        '**:data-[slot=navigation-menu-link]:focus:ring-0',
+        '**:data-[slot=navigation-menu-link]:focus:outline-none',
+
+        // ───────────── External Class Prop ─────────────
         className,
       )}
       {...props}
     />
-  );
-}
-
-function NavigationMenuViewport({
-  className,
-  ...props
-}: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport>) {
-  return (
-    <div
-      className={cn(
-        // Layout & Positioning
-        'absolute top-full left-0 z-50 flex justify-center',
-        'isolate',
-      )}>
-      <NavigationMenuPrimitive.Viewport
-        data-slot="navigation-menu-viewport"
-        className={cn(
-          // Layout & Sizing
-          'relative mt-1.5',
-          'h-[var(--radix-navigation-menu-viewport-height)] w-full',
-          'md:w-[var(--radix-navigation-menu-viewport-width)]',
-          'overflow-hidden rounded-md',
-
-          // Colors & Borders
-          'bg-juiBackground-popover',
-          'text-juiText-popover-foreground',
-          'border border-juiBorder-primary',
-          'shadow-lg',
-
-          // Animations
-          'origin-top-center',
-          'data-[state=open]:animate-in',
-          'data-[state=closed]:animate-out',
-          'data-[state=closed]:zoom-out-95',
-          'data-[state=open]:zoom-in-90',
-          className,
-        )}
-        {...props}
-      />
-    </div>
   );
 }
 
@@ -275,6 +237,5 @@ export {
   NavigationMenuTrigger,
   NavigationMenuLink,
   NavigationMenuIndicator,
-  NavigationMenuViewport,
   navigationMenuTriggerStyle,
 };

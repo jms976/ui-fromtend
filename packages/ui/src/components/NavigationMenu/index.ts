@@ -6,6 +6,5 @@ export {
   NavigationMenuTrigger,
   NavigationMenuLink,
   NavigationMenuIndicator,
-  NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from './NavigaionMenuParts';

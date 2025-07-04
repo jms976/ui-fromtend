@@ -175,6 +175,8 @@ export {
   MultiSelect,
 } from './Command';
 
+export { Progress } from './Progress';
+
 export {
   SidebarRoot,
   SidebarContent,
@@ -204,6 +206,23 @@ export {
 } from './Sidebar';
 
 export {
+  DropdownMenu,
+  DropdownMenuRoot,
+  DropdownMenuPortal,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from './DropdownMenu';
+
+export {
   NavigationMenuRoot,
   NavigationMenuList,
   NavigationMenuItem,
@@ -211,6 +230,5 @@ export {
   NavigationMenuTrigger,
   NavigationMenuLink,
   NavigationMenuIndicator,
-  NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from './NavigationMenu';
