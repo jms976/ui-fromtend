@@ -13,6 +13,7 @@
     "lint": "turbo lint --filter=...[HEAD^]",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "next-app": "pnpm --filter next-app",
+    "new-jmachine": "pnpm --filter new-jmachine",
     "react-app": "pnpm --filter react-app",
     "utils": "pnpm --filter @common/utils",
     "tokens": "pnpm --filter @common/tokens",

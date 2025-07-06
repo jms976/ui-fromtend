@@ -2,9 +2,6 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // experimental: {
-  //   reactCompiler: true,
-  // },
   /* config options here */
   transpilePackages: ['ui', 'typescript-config', 'eslint-config'],
   // Add rule for SVG files
