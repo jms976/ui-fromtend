@@ -223,6 +223,7 @@ export {
 } from './DropdownMenu';
 
 export {
+  NavigationMenu,
   NavigationMenuRoot,
   NavigationMenuList,
   NavigationMenuItem,

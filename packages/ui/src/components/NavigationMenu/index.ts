@@ -8,3 +8,5 @@ export {
   NavigationMenuIndicator,
   navigationMenuTriggerStyle,
 } from './NavigaionMenuParts';
+
+export { default as NavigationMenu } from './NavigationMenu';

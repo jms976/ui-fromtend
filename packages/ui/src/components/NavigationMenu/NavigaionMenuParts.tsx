@@ -79,18 +79,26 @@ const navigationMenuTriggerStyle = tv({
 function NavigationMenuTrigger({
   className,
   children,
+  asChild,
   ...props
 }: React.ComponentProps<typeof NavigationMenuPrimitive.Trigger>) {
   return (
     <NavigationMenuPrimitive.Trigger
       data-slot="navigation-menu-trigger"
       className={cn(navigationMenuTriggerStyle(), 'group', className)}
+      asChild={asChild}
       {...props}>
-      {children}{' '}
-      <ChevronDownIcon
-        className="relative top-px ml-1 size-3 transition duration-200 group-data-[state=open]:rotate-180"
-        aria-hidden="true"
-      />
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {children}{' '}
+          <ChevronDownIcon
+            className="relative top-px ml-1 size-3 transition duration-200 group-data-[state=open]:rotate-180"
+            aria-hidden="true"
+          />
+        </>
+      )}
     </NavigationMenuPrimitive.Trigger>
   );
 }
@@ -153,7 +161,11 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
   );
 }
 
-function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {
+function NavigationMenuLink({
+  className,
+  disabled = false,
+  ...props
+}: React.ComponentProps<typeof NavigationMenuPrimitive.Link> & { disabled?: boolean }) {
   return (
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
@@ -184,6 +196,8 @@ function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof
         // SVG styling
         "[&_svg:not([class*='text-'])]:text-juiText-muted-foreground",
         "[&_svg:not([class*='size-'])]:size-4",
+
+        disabled && 'text-juiText-disabled pointer-events-none',
         className,
       )}
       {...props}

@@ -30,13 +30,6 @@ import {
   MultiSelect,
   useConfirmDialog,
   ConfirmAlertDialog,
-  NavigationMenuRoot,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuContent,
-  NavigationMenuTrigger,
-  NavigationMenuLink,
-  navigationMenuTriggerStyle,
 } from '@common/ui';
 import {
   ArrowLeftIcon,
@@ -57,7 +50,6 @@ import {
 import { useController, useForm } from 'react-hook-form';
 import { useUpdateEffect } from '@common/utils';
 import { CalculatorIcon, SmileIcon, TvIcon } from 'lucide-react';
-import Link from 'next/link';
 
 export default function Page() {
   const [value, setValue] = useState('');
@@ -172,88 +164,6 @@ export default function Page() {
       <div className="flex items-center justify-center min-h-svh" ref={wrapperRef}>
         <div className="flex flex-col items-center justify-center gap-4 p-4 bg-juiBackground-paper">
           <h1 className="text-4xl font-bold">FLEX LAYOUT</h1>
-          <NavigationMenuRoot orientation="horizontal">
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-4">
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link href="#">Link One</Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#">Link One-1</NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#">Link One-2</NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                  <div>
-                    <Link href="/docs">Docs</Link>
-                  </div>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Item Two</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[250px] gap-4">
-                    <NavigationMenuLink asChild>
-                      <Link href="#">Link 2</Link>
-                    </NavigationMenuLink>
-                    <li>
-                      <NavigationMenuLink href="#">Link 2</NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#">Link 2</NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Item Two</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-4">
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link href="#">Link 2</Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#">Link 2</NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#">Link 2</NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Item Two</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-4">
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link href="#">Link 2</Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#">Link 2</NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink href="#">Link 2</NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenuRoot>
-
           <input type="datetime-local" />
           <Button
             onClick={() =>
