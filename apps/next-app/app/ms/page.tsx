@@ -30,6 +30,7 @@ import {
   MultiSelect,
   useConfirmDialog,
   ConfirmAlertDialog,
+  DropdownMenu,
 } from '@common/ui';
 import {
   ArrowLeftIcon,
@@ -260,6 +261,54 @@ export default function Page() {
             </CommandList>
             {/* </CommandRoot> */}
           </CommandDialog>
+
+          <DropdownMenu
+            itemHeight="large"
+            onOpenChange={(open) => console.warn(open)}
+            align="end"
+            side="right"
+            options={[
+              { label: 'My Profile', value: 'profile' },
+              { type: 'check', label: 'check', value: 'ckeck', checked: true },
+              { type: 'separator' },
+              {
+                type: 'group',
+                label: 'Team',
+                items: [
+                  { label: 'Team Settings', value: 'team-settings' },
+                  {
+                    type: 'sub',
+                    label: 'Invite Members',
+                    items: [
+                      { label: 'Email', value: 'invite-email' },
+                      { label: 'Slack', value: 'invite-slack', disabled: true },
+                      {
+                        type: 'sub',
+                        label: 'Invite Members',
+                        items: [
+                          { label: 'Email', value: 'invite-email' },
+                          { type: 'check', label: 'Email Check', value: 'invite-email-check' },
+                          { label: 'Slack', value: 'invite-slack', disabled: true },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                type: 'sub',
+                label: 'Appearance',
+                items: [
+                  { label: 'Light', value: 'light' },
+                  { label: 'Dark', value: 'dark' },
+                ],
+              },
+            ]}
+            trigger={<Button variant="gradient">Menu</Button>}
+            onItemSelect={(item) => {
+              console.warn('Selected:', item);
+            }}
+          />
 
           <RadioGroup
             direction="vertical"
