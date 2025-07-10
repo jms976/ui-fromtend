@@ -1,11 +1,11 @@
-import { fetchServerApi } from '../../lib/fetch/serverApi';
+import { fetchServerApi } from '../../../lib/fetch/serverApi';
 import Menus from './component/Menus';
 
 type CodeRequestBody = {
   pcmcd: string;
 };
 
-export default async function FetchTestPage() {
+export default async function DetectPage() {
   const codesData = await fetchServerApi<{ cmcdNm: string }[], CodeRequestBody>('/get/codes', { pcmcd: '' });
 
   return (

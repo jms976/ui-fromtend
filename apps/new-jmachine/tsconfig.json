@@ -7,6 +7,14 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "next.config.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "tailwind.config.js"],
+  "include": [
+    "next-env.d.ts",
+    "next.config.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "tailwind.config.js",
+    "app/error.tsx"
+  ],
   "exclude": ["node_modules"]
 }
