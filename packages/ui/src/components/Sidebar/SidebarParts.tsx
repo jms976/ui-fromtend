@@ -517,6 +517,9 @@ const sidebarMenuButtonVariants = tv({
         hover:font-bold
         data-[state=open]:hover:bg-transparent 
         data-[state=open]:hover:text-juiText-primary
+        group-data-[state=collapsed]:[&>svg]:size-5
+        group-data-[state=collapsed]:p-1.5!
+        group-data-[state=collapsed]:pointer-events-none
       `,
     },
     size: {
@@ -541,6 +544,7 @@ function SidebarMenuButton({
   size = 'default',
   tooltipContents,
   hoverCardContents,
+  hoverCardProps,
   className,
   ...props
 }: React.ComponentProps<'button'> & {
@@ -548,6 +552,7 @@ function SidebarMenuButton({
   isActive?: boolean;
   tooltipContents?: string;
   hoverCardContents?: React.ReactNode;
+  hoverCardProps?: Partial<React.ComponentProps<typeof HoverCard>>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot : 'button';
 
@@ -580,7 +585,24 @@ function SidebarMenuButton({
 
   if (hoverCardContents && state === 'collapsed') {
     return (
-      <HoverCard trigger={button} openDelay={0} side="right" align="start" sideOffset={8} contentClass="p-0">
+      <HoverCard
+        trigger={
+          <div
+            className={cn(
+              'group/card',
+              'flex items-center justify-center aspect-square',
+              'data-[state=open]:bg-juiPrimary',
+              'data-[state=open]:light:bg-juiGrey-a200',
+            )}>
+            {button}
+          </div>
+        }
+        openDelay={0}
+        side="right"
+        align="start"
+        sideOffset={8}
+        contentClass="p-0"
+        {...hoverCardProps}>
         {hoverCardContents}
       </HoverCard>
     );
@@ -629,8 +651,9 @@ function SidebarMenuAction({
         // showOnHover가 true일 때만 적용
         showOnHover && 'peer-data-[active=true]/menu-button:text-juiText-primary',
         showOnHover &&
-          'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 group-hover/menu-sub-item:opacity-100',
+          'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-50 group-hover/menu-sub-item:opacity-50',
         showOnHover && 'data-[state=open]:opacity-100 opacity-0',
+        'hover:opacity-100',
 
         // 외부에서 넘겨받은 className
         className,
@@ -708,7 +731,7 @@ function SidebarMenuSub({
       className={cn(
         'border-juiBorder-primary mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5',
         'group-data-[collapsible=icon]:hidden',
-        isFloat && 'ml-0 border-l-0 px-1.5',
+        isFloat && 'ml-0 border-l-0 translate-x-0 px-1.5',
         className,
       )}
       {...props}
@@ -790,6 +813,7 @@ function SidebarCollasibleGroup({
   children,
   tooltipContents,
   hoverCardContents,
+  hoverCardProps,
   extendType = 'chev',
   depth = 0,
   ...props
@@ -804,7 +828,7 @@ function SidebarCollasibleGroup({
     open: React.ComponentType<IconProps>;
     close: React.ComponentType<IconProps>;
   };
-} & Pick<React.ComponentProps<typeof SidebarMenuButton>, 'tooltipContents' | 'hoverCardContents'>) {
+} & Pick<React.ComponentProps<typeof SidebarMenuButton>, 'tooltipContents' | 'hoverCardContents' | 'hoverCardProps'>) {
   const CollasibleIcon = collasibleIcon;
   const OpenCustomIcon = customIcon?.open;
   const CloseCustomIcon = customIcon?.close;
@@ -819,7 +843,8 @@ function SidebarCollasibleGroup({
               variant="collasible"
               className={triggerClassName}
               tooltipContents={tooltipContents}
-              hoverCardContents={hoverCardContents}>
+              hoverCardContents={hoverCardContents}
+              hoverCardProps={hoverCardProps}>
               {CollasibleIcon && <CollasibleIcon />}
               {collasibleTitle}
 

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { SidebarInset, SidebarProvider, SidebarTrigger, Toaster } from '@common/ui';
-import { AppSidebar } from '../../components/AppSidebar';
+import { AppSidebar } from '../../components/Sidebar/AppSidebar';
 import { MainContent } from '../../components/MainContent';
 import ThemeToggle from '../../components/ThemeToggle';
 // import { signOut } from 'next-auth/react';
