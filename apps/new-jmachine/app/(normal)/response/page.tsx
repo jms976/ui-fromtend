@@ -1,3 +1,3 @@
-export default async function responsePage() {
+export default async function ResponsePage() {
   return <div>response</div>;
 }

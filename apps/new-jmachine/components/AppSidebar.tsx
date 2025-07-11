@@ -6,7 +6,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
@@ -14,18 +13,67 @@ import {
   SidebarInput,
   SidebarMenuItem,
   // SidebarMenuAction,
-  SidebarGroupAction,
+  SidebarCollasibleGroup,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+  SidebarMenuAction,
   // SidebarMenuBadge,
   // SidebarMenuSkeleton,
 } from '@common/ui';
-import { HomeIcon, PlusIcon } from '@common/ui/icons';
+import { ExpansionContentIcon, ExternalLinkIcon, HomeIcon, TagIcon } from '@common/ui/icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MenuItemType } from '../services/common/getMenusFetch';
+import { cn } from '@common/ui/lib/utils';
 
 export function AppSidebar({ menuData }: { menuData?: MenuItemType[] }) {
   const path = usePathname();
+
+  const RenderMenuItems = ({ items, depth = 0 }: { items: MenuItemType[]; depth?: number }) => {
+    return (
+      <>
+        {items.map((item) =>
+          item.children?.length ? (
+            <SidebarCollasibleGroup
+              key={item.code}
+              collasibleTitle={item.title}
+              collasibleIcon={depth > 0 ? TagIcon : ExpansionContentIcon}
+              tooltipContents={item.title}
+              extendType={depth > 0 ? 'plus' : 'chev'}
+              depth={depth}
+              triggerClassName={cn('h-12', depth > 0 && 'h-9 pl-5 text-juiText-secondary hover:text-juiText-primary')}>
+              <SidebarGroupContent className={cn('bg-juiGrey-100', depth > 0 && 'bg-transparent')}>
+                <SidebarMenuSub isFloat className={cn('p-0 m-0')}>
+                  <RenderMenuItems items={item.children} depth={depth + 1} />
+                </SidebarMenuSub>
+              </SidebarGroupContent>
+            </SidebarCollasibleGroup>
+          ) : (
+            <SidebarMenuSubItem key={item.code}>
+              <SidebarMenuSubButton
+                asChild
+                isActive={path === item.href}
+                className={cn(
+                  'h-9 pl-5 text-juiText-secondary hover:text-juiText-primary data-[active=true]:text-juiText-primary',
+                  depth > 1 && 'pl-10 text-xs h-8',
+                )}>
+                <Link data-slot="button" href={item.href}>
+                  {depth < 2 && <HomeIcon />}
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuSubButton>
+              <SidebarMenuAction showOnHover>
+                <ExternalLinkIcon />
+                <span className="sr-only">External</span>
+              </SidebarMenuAction>
+            </SidebarMenuSubItem>
+          ),
+        )}
+      </>
+    );
+  };
 
   return (
     <SidebarRoot collapsible="icon">
@@ -42,29 +90,19 @@ export function AppSidebar({ menuData }: { menuData?: MenuItemType[] }) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {/* 일반 그룹 */}
         <SidebarGroup>
-          <SidebarGroupLabel>장명수 사이드바 일반</SidebarGroupLabel>
-          <SidebarGroupAction title="Add Project">
-            <PlusIcon /> <span className="sr-only">Add Project</span>
-          </SidebarGroupAction>
+          {!!menuData?.length && <RenderMenuItems items={menuData} />}
           <SidebarGroupContent>
             <SidebarMenu>
-              {!!menuData?.length &&
-                menuData?.map((menu) => (
-                  <SidebarMenuItem key={menu.code}>
-                    <SidebarMenuButton asChild tooltipContents={menu.title} isActive={menu.href === path}>
-                      <Link data-slot="button" href={menu.href}>
-                        {/* {menu.icon} */}
-                        <HomeIcon />
-                        <span>{menu.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                    {/* <SidebarMenuAction showOnHover>
-                      <ListIcon /> <span className="sr-only">Add Project</span>
-                    </SidebarMenuAction> */}
-                  </SidebarMenuItem>
-                ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <ExternalLinkIcon />
+                  normal Disalbed
+                </SidebarMenuButton>
+                <SidebarMenuAction showOnHover>
+                  <ExternalLinkIcon /> <span className="sr-only">Add Project</span>
+                </SidebarMenuAction>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

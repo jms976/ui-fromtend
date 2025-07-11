@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { Button } from '@common/ui';
+import { Button, Slider } from '@common/ui';
 import { getMenusClientFetch } from '../../../../services/common/getMenusFetch';
 
 export default function Menus() {
@@ -30,6 +30,7 @@ export default function Menus() {
       <span>{session?.user?.userNm}</span>
       <Button onClick={async () => await fetchData()}>call</Button>
       <Button onClick={() => setCrash(true)}>Error</Button>
+      <Slider />
 
       <h2 className="text-lg font-bold">클라이언트 패치 결과</h2>
       <pre className="text-sm p-2 mt-2">{data ? data : '불러오는 중...'}</pre>

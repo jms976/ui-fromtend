@@ -3,9 +3,9 @@ import { Metadata } from 'next';
 import { MainContent } from '../../../components/MainContent';
 
 export const metadata: Metadata = {
-  title: 'Fetch',
+  title: 'Response',
 };
 
-export default function responseLayout({ children }: { children: ReactNode }) {
+export default function ResponseLayout({ children }: { children: ReactNode }) {
   return <MainContent contentType="flex">{children}</MainContent>;
 }

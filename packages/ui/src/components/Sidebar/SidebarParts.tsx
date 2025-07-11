@@ -10,6 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleRoot,
   CollapsibleTrigger,
+  HoverCard,
   Input,
   Separator,
   SheetContent,
@@ -510,6 +511,13 @@ const sidebarMenuButtonVariants = tv({
         hover:text-juiText-secondary
         hover:shadow-[0_0_0_1px_var(--juiText-disabled)]
       `,
+      collasible: `
+        data-[active=true]:bg-transparent 
+        active:bg-transparent
+        hover:font-bold
+        data-[state=open]:hover:bg-transparent 
+        data-[state=open]:hover:text-juiText-primary
+      `,
     },
     size: {
       default: 'h-8 text-sm',
@@ -532,12 +540,14 @@ function SidebarMenuButton({
   variant = 'default',
   size = 'default',
   tooltipContents,
+  hoverCardContents,
   className,
   ...props
 }: React.ComponentProps<'button'> & {
   asChild?: boolean;
   isActive?: boolean;
   tooltipContents?: string;
+  hoverCardContents?: React.ReactNode;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot : 'button';
 
@@ -564,8 +574,16 @@ function SidebarMenuButton({
     />
   );
 
-  if (!tooltipContents) {
+  if (!tooltipContents && !hoverCardContents) {
     return button;
+  }
+
+  if (hoverCardContents && state === 'collapsed') {
+    return (
+      <HoverCard trigger={button} openDelay={0} side="right" align="start" sideOffset={8} contentClass="p-0">
+        {hoverCardContents}
+      </HoverCard>
+    );
   }
 
   return (
@@ -592,7 +610,7 @@ function SidebarMenuAction({
         // 기본 스타일
         'text-juiText-primary ring-juiBorder-primary hover:bg-current/10 hover:text-juiText-primary/80',
         'peer-hover/menu-button:text-juiText-primary',
-        'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center',
+        'absolute top-1.5 right-1.5 flex aspect-square w-5 items-center justify-center',
         'rounded-md p-0 outline-hidden transition-transform',
         'focus-visible:ring-2',
         '[&>svg]:size-4 [&>svg]:shrink-0',
@@ -610,7 +628,8 @@ function SidebarMenuAction({
 
         // showOnHover가 true일 때만 적용
         showOnHover && 'peer-data-[active=true]/menu-button:text-juiText-primary',
-        showOnHover && 'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100',
+        showOnHover &&
+          'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 group-hover/menu-sub-item:opacity-100',
         showOnHover && 'data-[state=open]:opacity-100 opacity-0',
 
         // 외부에서 넘겨받은 className
@@ -764,50 +783,98 @@ function SidebarMenuSubButton({
 
 function SidebarCollasibleGroup({
   collasibleTitle,
+  collasibleIcon,
   groupTitle,
-  extendType = 'chev',
   customIcon,
+  triggerClassName,
   children,
+  tooltipContents,
+  hoverCardContents,
+  extendType = 'chev',
+  depth = 0,
   ...props
 }: React.ComponentProps<typeof CollapsibleRoot> & {
-  collasibleTitle: React.ReactNode;
+  collasibleTitle: string;
+  collasibleIcon?: React.ComponentType<IconProps>;
   groupTitle?: string;
+  triggerClassName?: string;
   extendType?: 'chev' | 'plus';
+  depth?: number;
   customIcon?: {
     open: React.ComponentType<IconProps>;
     close: React.ComponentType<IconProps>;
   };
-}) {
+} & Pick<React.ComponentProps<typeof SidebarMenuButton>, 'tooltipContents' | 'hoverCardContents'>) {
+  const CollasibleIcon = collasibleIcon;
   const OpenCustomIcon = customIcon?.open;
   const CloseCustomIcon = customIcon?.close;
 
   return (
-    <CollapsibleRoot className="group/collapsible" {...props}>
-      <SidebarGroup className="py-0">
-        {groupTitle && <SidebarGroupLabel className="py-0">{groupTitle}</SidebarGroupLabel>}
-        <SidebarGroupLabel asChild className="group/label text-juiText-primary hover:bg-current/10 text-sm">
-          <CollapsibleTrigger>
-            {collasibleTitle}
-            {customIcon && OpenCustomIcon && CloseCustomIcon ? (
-              <>
-                <OpenCustomIcon className="ml-auto group-data-[state=open]/collapsible:hidden" />
-                <CloseCustomIcon className="ml-auto group-data-[state=closed]/collapsible:hidden" />
-              </>
-            ) : (
-              extendType === 'chev' && (
-                <ChevronDownIcon className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              )
-            )}
-            {extendType === 'plus' && (
-              <>
-                <PlusIcon className="ml-auto group-data-[state=open]/collapsible:hidden" />
-                <MinusIcon className="ml-auto group-data-[state=closed]/collapsible:hidden" />
-              </>
-            )}
+    <CollapsibleRoot className={`group/collapsible-${depth}`} {...props}>
+      {groupTitle && <SidebarGroupLabel className="py-0">{groupTitle}</SidebarGroupLabel>}
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <CollapsibleTrigger asChild>
+            <SidebarMenuButton
+              variant="collasible"
+              className={triggerClassName}
+              tooltipContents={tooltipContents}
+              hoverCardContents={hoverCardContents}>
+              {CollasibleIcon && <CollasibleIcon />}
+              {collasibleTitle}
+
+              {customIcon && OpenCustomIcon && CloseCustomIcon ? (
+                <>
+                  <OpenCustomIcon
+                    className={cn('ml-auto', {
+                      'group-data-[state=open]/collapsible-0:hidden': depth === 0,
+                      'group-data-[state=open]/collapsible-1:hidden': depth === 1,
+                      'group-data-[state=open]/collapsible-2:hidden': depth === 2,
+                    })}
+                  />
+                  <CloseCustomIcon
+                    className={cn('ml-auto', {
+                      'group-data-[state=closed]/collapsible-0:hidden': depth === 0,
+                      'group-data-[state=closed]/collapsible-1:hidden': depth === 1,
+                      'group-data-[state=closed]/collapsible-2:hidden': depth === 2,
+                    })}
+                  />
+                </>
+              ) : (
+                extendType === 'chev' && (
+                  <ChevronDownIcon
+                    className={cn('ml-auto transition-transform', {
+                      'group-data-[state=open]/collapsible-0:rotate-180': depth === 0,
+                      'group-data-[state=open]/collapsible-1:rotate-180': depth === 1,
+                      'group-data-[state=open]/collapsible-2:rotate-180': depth === 2,
+                    })}
+                  />
+                )
+              )}
+
+              {extendType === 'plus' && (
+                <>
+                  <PlusIcon
+                    className={cn('ml-auto', {
+                      'group-data-[state=open]/collapsible-0:hidden': depth === 0,
+                      'group-data-[state=open]/collapsible-1:hidden': depth === 1,
+                      'group-data-[state=open]/collapsible-2:hidden': depth === 2,
+                    })}
+                  />
+                  <MinusIcon
+                    className={cn('ml-auto', {
+                      'group-data-[state=closed]/collapsible-0:hidden': depth === 0,
+                      'group-data-[state=closed]/collapsible-1:hidden': depth === 1,
+                      'group-data-[state=closed]/collapsible-2:hidden': depth === 2,
+                    })}
+                  />
+                </>
+              )}
+            </SidebarMenuButton>
           </CollapsibleTrigger>
-        </SidebarGroupLabel>
-        <CollapsibleContent>{children}</CollapsibleContent>
-      </SidebarGroup>
+        </SidebarMenuItem>
+      </SidebarMenu>
+      <CollapsibleContent>{children}</CollapsibleContent>
     </CollapsibleRoot>
   );
 }

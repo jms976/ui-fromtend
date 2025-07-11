@@ -3,9 +3,9 @@ import { Metadata } from 'next';
 import { MainContent } from '../../../components/MainContent';
 
 export const metadata: Metadata = {
-  title: 'Fetch',
+  title: 'dashboard',
 };
 
-export default function dashboardLayout({ children }: { children: ReactNode }) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   return <MainContent contentType="flex">{children}</MainContent>;
 }

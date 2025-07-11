@@ -1,3 +1,3 @@
-export default async function analysisPage() {
+export default async function AnalysisPage() {
   return <div>analysis</div>;
 }

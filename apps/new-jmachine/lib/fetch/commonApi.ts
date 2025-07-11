@@ -35,6 +35,7 @@ export type RequestOptions = {
 
   /** Next.js의 revalidate 및 tag 기반 캐시 설정 (서버에서만 유효) */
   next?: NextFetchRequestConfig;
+  signal?: AbortSignal;
 };
 
 /** 허용되는 HTTP 메서드 */
@@ -62,7 +63,7 @@ export async function request<TResult, TBody = Record<string, unknown>>(
   options?: RequestOptions,
   method: HttpMethod = 'POST',
 ): Promise<ApiResponse<TResult>> {
-  const { baseUrl = '', getCookieHeader, extraHeaders = {}, cache = 'default', next } = options || {};
+  const { baseUrl = '', getCookieHeader, extraHeaders = {}, cache = 'default', next, signal } = options || {};
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -85,6 +86,7 @@ export async function request<TResult, TBody = Record<string, unknown>>(
     method,
     headers,
     body: ['GET', 'HEAD'].includes(method) ? undefined : params ? JSON.stringify(params) : undefined,
+    signal,
   };
 
   if (cache) fetchOptions.cache = cache;
