@@ -2,7 +2,6 @@ import {
   SidebarRoot,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -31,9 +30,7 @@ export function AppSidebar({ menuData }: { menuData?: MenuItemType[] }) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup className="p-0">{!!menuData?.length && <NavigationItemRenderer items={menuData} />}</SidebarGroup>
-      </SidebarContent>
+      <SidebarContent>{!!menuData?.length && <NavigationItemRenderer items={menuData} />}</SidebarContent>
       <SidebarFooter>
         <div className="p-4">
           <SidebarInput />

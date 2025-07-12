@@ -5,7 +5,7 @@ import { getToken } from 'next-auth/jwt';
 
 // eslint-disable-next-line turbo/no-undeclared-env-vars
 const SECRET = process.env.AUTH_SECRET!;
-const PUBLIC_PATHS = ['/login', '/api/auth'];
+const PUBLIC_PATHS = ['/login', '/api/auth', '/test'];
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
