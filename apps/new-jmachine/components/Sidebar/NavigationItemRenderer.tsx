@@ -56,11 +56,11 @@ function renderGroupItem({ item, depth, isHover }: { item: MenuItemType; depth: 
       extendType={depth > 0 ? 'plus' : 'chev'}
       depth={depth}
       triggerClassName={cn(
-        'h-12',
+        'h-12 pl-4',
         'data-[state=open]:font-bold data-[state=open]:text-juiText-primary',
         '[group:not([data-state=collapsed])]:data-[state=open]:bg-current/5',
-        depth > 0 && 'h-9 pl-5 text-juiText-secondary hover:text-juiText-primary',
-        isHover && 'pl-5 pr-2',
+        depth > 0 && 'h-9 pl-6 text-juiText-secondary hover:text-juiText-primary',
+        isHover && 'pl-4 pr-2',
       )}
       {...(isTopLevel && {
         hoverCardContents: (
@@ -95,7 +95,7 @@ function renderRootItem({ item, path }: { item: MenuItemType; path: string }) {
         tooltipContents={item.title}
         isActive={path === item.href}
         className={cn(`
-          h-12 py-2 
+          h-12 py-2 pl-4
           active:font-bold
           data-[active=true]:bg-transparent 
           active:bg-transparent
@@ -138,10 +138,10 @@ function renderSubItem({
         asChild
         isActive={path === item.href}
         className={cn(
-          'h-9 pl-5 text-juiText-secondary hover:text-juiText-primary hover:font-bold data-[active=true]:text-juiText-primary',
-          depth > 1 && 'pl-10 text-xs h-8',
-          isHover && 'pl-5 pr-2',
-          isHover && depth > 1 && 'pl-8',
+          'h-9 pl-6 text-juiText-secondary hover:text-juiText-primary hover:font-bold data-[active=true]:text-juiText-primary',
+          depth > 1 && 'pl-12 text-xs h-8',
+          isHover && 'pl-4 pr-2',
+          isHover && depth > 1 && 'pl-10',
         )}>
         <Link data-slot="button" href={item.href}>
           {depth < 2 && <HomeIcon />}
