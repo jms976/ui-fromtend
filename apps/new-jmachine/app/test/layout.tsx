@@ -45,6 +45,20 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
         },
       ],
     },
+    {
+      href: '/test/case5',
+      icon: 'Scenario',
+      title: 'StreamingWithUse',
+      code: 'M010319',
+      type: 'NAV',
+    },
+    {
+      href: '/test/case6',
+      icon: 'Scenario',
+      title: 'NonStremingWithUse',
+      code: 'M010310',
+      type: 'NAV',
+    },
   ];
 
   // const menuData: MenuItemType[] = [
