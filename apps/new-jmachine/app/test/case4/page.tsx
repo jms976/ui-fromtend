@@ -5,14 +5,19 @@ import { Suspense } from 'react';
 import { Skeleton } from '@common/ui';
 import { getQueryClient } from '../../../lib/query/queryClient';
 import ClientChild5 from './ClientChild5';
-// import { fetch5Sec } from '../../../services/delayTest/fetch5sec';
+import { fetch5Sec } from '../../../services/delayTest/fetch5sec';
 
-export default async function Page() {
+export default function Page() {
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery({
+  queryClient.prefetchQuery({
     queryKey: ['data3', 0],
     queryFn: fetch3Sec,
+  });
+
+  queryClient.prefetchQuery({
+    queryKey: ['qq', 0],
+    queryFn: fetch5Sec,
   });
 
   // await Promise.all([
