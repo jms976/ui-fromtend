@@ -15,8 +15,8 @@ export default async function Page() {
     <div>
       <h2>5. client 컴포넌트 + use() : html stream</h2>
 
-      <div className="flex gap-4 h-96 w-96">
-        <div className="w-48 h-full border">
+      <div className="flex h-96 w-full gap-4">
+        <div className="w-1/2 h-full border">
           <Suspense
             fallback={
               <div>
@@ -28,7 +28,7 @@ export default async function Page() {
           </Suspense>
         </div>
 
-        <div className="w-48 h-full border">
+        <div className="w-1/2 h-full border">
           <Suspense
             fallback={
               <div>
