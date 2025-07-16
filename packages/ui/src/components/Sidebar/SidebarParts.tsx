@@ -257,11 +257,12 @@ function SidebarRoot({
   );
 }
 
-function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+function SidebarTrigger({ className, onClick, asChild, children, ...props }: React.ComponentProps<typeof Button>) {
+  const Comp = asChild ? 'button' : Button;
   const { toggleSidebar, open } = useSidebar();
 
   return (
-    <Button
+    <Comp
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       className={cn(className)}
@@ -270,10 +271,16 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
         toggleSidebar();
       }}
       {...props}>
-      {open ? <ArrowLeftIcon size="small" /> : <ArrowRightIcon size="small" />}
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {open ? <ArrowLeftIcon size="small" /> : <ArrowRightIcon size="small" />}
 
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
+          <span className="sr-only">Toggle Sidebar</span>
+        </>
+      )}
+    </Comp>
   );
 }
 
@@ -590,7 +597,8 @@ function SidebarMenuButton({
           <div
             className={cn(
               'group/card',
-              'flex items-center justify-center aspect-square',
+              'transition-all duration-300',
+              'flex items-center justify-center',
               'data-[state=open]:bg-juiPrimary',
               'data-[state=open]:light:bg-juiGrey-a200',
             )}>
@@ -831,6 +839,8 @@ function SidebarCollasibleGroup({
     close: React.ComponentType<IconProps>;
   };
 } & Pick<React.ComponentProps<typeof SidebarMenuButton>, 'tooltipContents' | 'hoverCardContents' | 'hoverCardProps'>) {
+  const { state } = useSidebar();
+
   const CollasibleIcon = collapsibleIcon;
   const OpenCustomIcon = customIcon?.open;
   const CloseCustomIcon = customIcon?.close;
@@ -848,7 +858,7 @@ function SidebarCollasibleGroup({
               hoverCardContents={hoverCardContents}
               hoverCardProps={hoverCardProps}>
               {CollasibleIcon && <CollasibleIcon />}
-              {!CollasibleIcon && `${collapsibleTitle[0]}...`}
+              {!CollasibleIcon && state === 'collapsed' && `${collapsibleTitle[0]}...`}
               <span>{collapsibleTitle}</span>
 
               {customIcon && OpenCustomIcon && CloseCustomIcon ? (
