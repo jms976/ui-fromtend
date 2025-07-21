@@ -249,3 +249,5 @@ export {
   NavigationMenuIndicator,
   navigationMenuTriggerStyle,
 } from './NavigationMenu';
+
+export { Calendar, CalendarDayButton, type DateRange } from './Calendar';

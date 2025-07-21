@@ -1,15 +1,66 @@
 'use client';
 
-import { Button, Separator, Skeleton, Tabs, type TabItemType } from '@common/ui';
+import { Button, Calendar, DateRange, Input, Popover, Separator, Skeleton, Tabs, type TabItemType } from '@common/ui';
 import { useState } from 'react';
 import { PlayIcon } from '@common/ui/icons';
 import { toast } from 'sonner';
+import { format } from 'date-fns';
 
 export default function TabsPage() {
   function ScenarioList(props: { scenarioId: number }) {
+    const [date, setDate] = useState<Date | undefined>(undefined);
+    const [open, setOpen] = useState(false);
+
+    const [dateRange, setDateRange] = useState<DateRange | undefined>({
+      from: new Date(2025, 0, 9),
+      to: new Date(2025, 6, 26),
+    });
+
     return (
       <div className="bg-juiBackground-paper w-full p-4 h-[2000px] overflow-auto">
         <h1 className="text-4xl font-bold">TABS LAYOUT</h1>
+        <div className="flex flex-col gap-4">
+          <Calendar
+            mode="range"
+            defaultMonth={dateRange?.from}
+            selected={dateRange}
+            onSelect={setDateRange}
+            className="rounded-lg border shadow-sm"
+            captionLayout="dropdown"
+          />
+          <div className="w-48">
+            <Popover
+              open={open}
+              onOpenChange={setOpen}
+              trigger={
+                <Input
+                  type="date"
+                  value={date ? format(date, 'yyyy-MM-dd') : ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    setDate(value ? new Date(value + 'T00:00:00') : undefined);
+                  }}
+                  className="[&::-webkit-calendar-picker-indicator]:hidden"
+                />
+              }>
+              <Calendar
+                mode="single"
+                selected={date}
+                defaultMonth={date}
+                onSelect={(selectDate) => {
+                  setDate(selectDate);
+
+                  if (selectDate) {
+                    setOpen(false);
+                  }
+                }}
+                className="rounded-md shadow-sm"
+                captionLayout="dropdown"
+              />
+            </Popover>
+          </div>
+        </div>
         Scenario {props.scenarioId}
       </div>
     );
