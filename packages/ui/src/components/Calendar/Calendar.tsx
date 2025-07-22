@@ -28,7 +28,9 @@ function Calendar({
       locale={ko}
       showOutsideDays={showOutsideDays}
       className={cn(
-        'bg-background group/calendar p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
+        'bg-juiBackground-popover group/calendar p-3',
+        '[--cell-size:--spacing(8)]',
+        '[[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -65,36 +67,37 @@ function Calendar({
           'relative has-focus:border-ring border border-input shadow-xs has-focus:ring-ring/50 has-focus:ring-[3px] rounded-md',
           defaultClassNames.dropdown_root,
         ),
-        dropdown: cn('absolute bg-popover inset-0 opacity-0', defaultClassNames.dropdown),
+        dropdown: cn('absolute inset-0 opacity-0', defaultClassNames.dropdown),
         caption_label: cn(
           'select-none font-medium',
           captionLayout === 'label'
             ? 'text-sm'
-            : 'rounded-md pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5',
+            : 'rounded-md pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-juiText-secondary [&>svg]:size-3.5',
           defaultClassNames.caption_label,
         ),
         table: 'w-full border-collapse',
         weekdays: cn('flex', defaultClassNames.weekdays),
         weekday: cn(
-          'text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none',
+          'text-juiText-primary font-medium rounded-md flex-1 text-[0.8rem] select-none',
+          '[&:nth-child(1)]:text-juiError', // 일요일 (index 0 → 1번째 child)
+          '[&:nth-child(7)]:text-juiPrimary', // 토요일 (index 6 → 7번째 child)
           defaultClassNames.weekday,
         ),
         week: cn('flex w-full mt-2', defaultClassNames.week),
         week_number_header: cn('select-none w-(--cell-size)', defaultClassNames.week_number_header),
-        week_number: cn('text-[0.8rem] select-none text-muted-foreground', defaultClassNames.week_number),
+        week_number: cn('text-[0.8rem] select-none text-juiText-secondary', defaultClassNames.week_number),
         day: cn(
-          'relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none',
+          'relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-full [&:last-child[data-selected=true]_button]:rounded-r-full group/day aspect-square select-none',
+          'group-data-[mode=single]/calendar:rounded-full',
+          'group-data-[mode=multiple]/calendar:rounded-full',
           defaultClassNames.day,
         ),
-        range_start: cn('rounded-l-md bg-accent', defaultClassNames.range_start),
-        range_middle: cn('rounded-none', defaultClassNames.range_middle),
-        range_end: cn('rounded-r-md bg-accent', defaultClassNames.range_end),
-        today: cn(
-          'bg-accent text-accent-foreground rounded-md data-[selected=true]:rounded-none',
-          defaultClassNames.today,
-        ),
-        outside: cn('text-muted-foreground aria-selected:text-muted-foreground', defaultClassNames.outside),
-        disabled: cn('text-muted-foreground opacity-50', defaultClassNames.disabled),
+        range_start: cn('rounded-l-full bg-juiPrimary/40', defaultClassNames.range_start),
+        range_middle: cn('rounded-none bg-juiPrimary/40', defaultClassNames.range_middle),
+        range_end: cn('rounded-r-full bg-juiPrimary/40', defaultClassNames.range_end),
+        today: cn('data-[selected=true]:bg-juiPrimary/40', defaultClassNames.today),
+        outside: cn('text-juiText-secondary aria-selected:text-juiText-secondary', defaultClassNames.outside),
+        disabled: cn('text-juiText-secondary opacity-50', defaultClassNames.disabled),
         hidden: cn('invisible', defaultClassNames.hidden),
         ...classNames,
       }}
@@ -127,7 +130,7 @@ function Calendar({
               target: { value: val },
             } as React.ChangeEvent<HTMLSelectElement>;
 
-            onChange?.(syntheticEvent); // ✅ DayPicker가 원하는 시그니처로 전달
+            onChange?.(syntheticEvent);
           };
 
           return (
@@ -174,36 +177,36 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
       data-range-start={modifiers.range_start}
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
+      data-today={modifiers.today}
       className={cn(
         // ✅ 선택 상태
         'data-[selected-single=true]:bg-juiPrimary',
+        'data-[selected-single=true]:rounded-full',
         'data-[selected-single=true]:hover:bg-juiPrimary/70',
         'light:data-[selected-single=true]:text-white',
 
         // ✅ range 상태
-        'data-[range-middle=true]:bg-juiPrimary/40',
-        'data-[range-middle=true]:hover:bg-juiPrimary/70',
+        'data-[range-middle=true]:hover:bg-current/40',
         'light:data-[range-middle=true]:text-white',
-        'data-[range-middle=true]:rounded-none',
+        'data-[range-middle=true]:hover:rounded-full',
 
         'data-[range-start=true]:bg-juiPrimary',
         'data-[range-start=true]:hover:bg-juiPrimary/70',
         'light:data-[range-start=true]:text-white',
-        // 'data-[range-start=true]:rounded-md',
-        'data-[range-start=true]:rounded-full',
 
         'data-[range-end=true]:bg-juiPrimary',
         'data-[range-end=true]:hover:bg-juiPrimary/70',
         'light:data-[range-end=true]:text-white',
-        // 'data-[range-end=true]:rounded-md',
-        'data-[range-end=true]:rounded-full',
+
+        // ✅ 오늘 날짜
+        'data-[today=true]:border',
+        'data-[today=true]:data-[range-end=true]:bg-juiPrimary',
+        'data-[today=true]:border-juiPrimary/80',
+        'data-[today=true]:data-[range-middle=true]:hover:bg-current/40',
 
         // ✅ 포커스 상태
-        // 'group-data-[focused=true]/day:border-ring',
-        // 'group-data-[focused=true]/day:ring-ring/50',
         'group-data-[focused=true]/day:relative',
         'group-data-[focused=true]/day:z-10',
-        // 'group-data-[focused=true]/day:ring-[1px]',
 
         // ✅ 레이아웃 및 기본 스타일
         'flex',
@@ -217,7 +220,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
         'leading-none',
         'font-normal',
         'hover:bg-current/10',
-        'hover:roundded-full',
+        'hover:rounded-full',
         'hover:border-0 focus-visible:border-1',
 
         // ✅ 자식 span 스타일

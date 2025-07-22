@@ -12,8 +12,8 @@ export default function TabsPage() {
     const [open, setOpen] = useState(false);
 
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
-      from: new Date(2025, 0, 9),
-      to: new Date(2025, 6, 26),
+      from: new Date(2025, 5, 8),
+      to: new Date(2025, 6, 19),
     });
 
     return (
@@ -33,6 +33,7 @@ export default function TabsPage() {
             defaultMonth={dateRange?.from}
             selected={dateRange}
             onSelect={setDateRange}
+            numberOfMonths={2}
             className="rounded-lg border shadow-sm"
             captionLayout="dropdown"
           />
