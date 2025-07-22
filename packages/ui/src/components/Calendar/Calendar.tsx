@@ -181,7 +181,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
         'light:data-[selected-single=true]:text-white',
 
         // ✅ range 상태
-        'data-[range-middle=true]:bg-juiPrimary',
+        'data-[range-middle=true]:bg-juiPrimary/40',
         'data-[range-middle=true]:hover:bg-juiPrimary/70',
         'light:data-[range-middle=true]:text-white',
         'data-[range-middle=true]:rounded-none',
@@ -190,13 +190,13 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
         'data-[range-start=true]:hover:bg-juiPrimary/70',
         'light:data-[range-start=true]:text-white',
         // 'data-[range-start=true]:rounded-md',
-        'data-[range-start=true]:rounded-l-md',
+        'data-[range-start=true]:rounded-full',
 
         'data-[range-end=true]:bg-juiPrimary',
         'data-[range-end=true]:hover:bg-juiPrimary/70',
         'light:data-[range-end=true]:text-white',
         // 'data-[range-end=true]:rounded-md',
-        'data-[range-end=true]:rounded-r-md',
+        'data-[range-end=true]:rounded-full',
 
         // ✅ 포커스 상태
         // 'group-data-[focused=true]/day:border-ring',
@@ -226,9 +226,8 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
 
         // ✅ 외부 전달 props
         defaultClassNames.day,
-        'rounded-md',
-        'data-[range-start=true]:rounded-r-none',
-        'data-[range-end=true]:rounded-l-none',
+        'rounded-full',
+
         className,
       )}
       {...props}

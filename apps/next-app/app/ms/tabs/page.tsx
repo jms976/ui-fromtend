@@ -21,6 +21,14 @@ export default function TabsPage() {
         <h1 className="text-4xl font-bold">TABS LAYOUT</h1>
         <div className="flex flex-col gap-4">
           <Calendar
+            mode="single"
+            selected={date}
+            defaultMonth={date}
+            onSelect={setDate}
+            className="rounded-lg border shadow-sm"
+            // captionLayout="dropdown"
+          />
+          <Calendar
             mode="range"
             defaultMonth={dateRange?.from}
             selected={dateRange}
