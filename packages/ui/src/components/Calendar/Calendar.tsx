@@ -2,9 +2,11 @@
 
 import * as React from 'react';
 import { DayButton, DayPicker, getDefaultClassNames, type DateRange } from 'react-day-picker';
+import { ko } from 'date-fns/locale';
 
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@common/ui/icons';
 import { Button, buttonVariants } from '../Button';
+import { Select } from '../Select';
 import { cn } from '../../lib/utils';
 
 function Calendar({
@@ -23,6 +25,7 @@ function Calendar({
 
   return (
     <DayPicker
+      locale={ko}
       showOutsideDays={showOutsideDays}
       className={cn(
         'bg-background group/calendar p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
@@ -118,6 +121,31 @@ function Calendar({
             </td>
           );
         },
+        Dropdown: ({ value, onChange, options }) => {
+          const handleValueChange = (val: string) => {
+            const syntheticEvent = {
+              target: { value: val },
+            } as React.ChangeEvent<HTMLSelectElement>;
+
+            onChange?.(syntheticEvent); // ✅ DayPicker가 원하는 시그니처로 전달
+          };
+
+          return (
+            <Select
+              value={String(value)}
+              onValueChange={handleValueChange}
+              options={
+                !options || options.length === 0
+                  ? []
+                  : options.map((opt) => ({
+                      ...opt,
+                      value: opt.value.toString(),
+                    }))
+              }
+            />
+          );
+        },
+
         ...components,
       }}
       {...props}
