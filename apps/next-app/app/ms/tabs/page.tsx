@@ -16,6 +16,8 @@ export default function TabsPage() {
       to: new Date(2025, 6, 19),
     });
 
+    const [validateOpen, setValidateOpen] = useState(false);
+
     return (
       <div className="bg-juiBackground-paper w-full p-4 h-[2000px] overflow-auto">
         <h1 className="text-4xl font-bold">TABS LAYOUT</h1>
@@ -24,9 +26,32 @@ export default function TabsPage() {
             mode="single"
             selected={date}
             defaultMonth={date}
+            numberOfMonths={2}
+            onSelect={() => {
+              setValidateOpen(true);
+
+              return;
+            }}
+            warnOpen={validateOpen}
+            setWarnOpen={setValidateOpen}
+            className="rounded-lg border shadow-sm"
+          />
+          <Calendar
+            mode="single"
+            selected={date}
+            defaultMonth={date}
+            numberOfMonths={2}
             onSelect={setDate}
             className="rounded-lg border shadow-sm"
-            // captionLayout="dropdown"
+            captionLayout="dropdown-months"
+          />
+          <Calendar
+            mode="single"
+            selected={date}
+            defaultMonth={date}
+            onSelect={setDate}
+            className="rounded-lg border shadow-sm"
+            captionLayout="dropdown-years"
           />
           <Calendar
             mode="range"
@@ -34,13 +59,14 @@ export default function TabsPage() {
             selected={dateRange}
             onSelect={setDateRange}
             numberOfMonths={2}
-            className="rounded-lg border shadow-sm"
+            className="rounded-lg border shadow-sm min-w"
             captionLayout="dropdown"
           />
           <div className="w-48">
             <Popover
               open={open}
               onOpenChange={setOpen}
+              align="start"
               trigger={
                 <Input
                   type="date"

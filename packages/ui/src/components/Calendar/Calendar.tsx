@@ -7,6 +7,8 @@ import { ko } from 'date-fns/locale';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@common/ui/icons';
 import { Button, buttonVariants } from '../Button';
 import { Select } from '../Select';
+import { DialogDescription, DialogOverlay, DialogRoot } from '@common/ui/components/Dialog';
+import { DialogPortal, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
 import { cn } from '../../lib/utils';
 
 function Calendar({
@@ -17,14 +19,20 @@ function Calendar({
   buttonVariant = 'transparent',
   formatters,
   components,
+  warnOpen,
+  setWarnOpen,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
+} & {
+  warnOpen?: boolean;
+  setWarnOpen?: (open: boolean) => void;
 }) {
   const defaultClassNames = getDefaultClassNames();
 
   return (
     <DayPicker
+      mode="single"
       locale={ko}
       showOutsideDays={showOutsideDays}
       className={cn(
@@ -56,7 +64,7 @@ function Calendar({
           defaultClassNames.button_next,
         ),
         month_caption: cn(
-          'flex items-center justify-center h-(--cell-size) w-full px-(--cell-size)',
+          'flex items-center justify-center h-(--cell-size) w-full px-(--cell-size) min-w-72',
           defaultClassNames.month_caption,
         ),
         dropdowns: cn(
@@ -87,15 +95,18 @@ function Calendar({
         week_number_header: cn('select-none w-(--cell-size)', defaultClassNames.week_number_header),
         week_number: cn('text-[0.8rem] select-none text-juiText-secondary', defaultClassNames.week_number),
         day: cn(
-          'relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-full [&:last-child[data-selected=true]_button]:rounded-r-full group/day aspect-square select-none',
+          'flex relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-full [&:last-child[data-selected=true]_button]:rounded-r-full group/day aspect-square select-none',
           'group-data-[mode=single]/calendar:rounded-full',
           'group-data-[mode=multiple]/calendar:rounded-full',
           defaultClassNames.day,
         ),
-        range_start: cn('rounded-l-full bg-juiPrimary/40', defaultClassNames.range_start),
-        range_middle: cn('rounded-none bg-juiPrimary/40', defaultClassNames.range_middle),
-        range_end: cn('rounded-r-full bg-juiPrimary/40', defaultClassNames.range_end),
-        today: cn('data-[selected=true]:bg-juiPrimary/40', defaultClassNames.today),
+        range_start: cn('rounded-l-full bg-juiPrimary/40 light:bg-juiPrimary/60', defaultClassNames.range_start),
+        range_middle: cn('rounded-none bg-juiPrimary/40 light:bg-juiPrimary/60', defaultClassNames.range_middle),
+        range_end: cn('rounded-r-full bg-juiPrimary/40 light:bg-juiPrimary/60', defaultClassNames.range_end),
+        today: cn(
+          'data-[selected=true]:bg-juiPrimary/40 light:data-[selected=true]:bg-juiPrimary/60',
+          defaultClassNames.today,
+        ),
         outside: cn('text-juiText-secondary aria-selected:text-juiText-secondary', defaultClassNames.outside),
         disabled: cn('text-juiText-secondary opacity-50', defaultClassNames.disabled),
         hidden: cn('invisible', defaultClassNames.hidden),
@@ -103,7 +114,21 @@ function Calendar({
       }}
       components={{
         Root: ({ className: rootClassName, rootRef, ...restRoot }) => {
-          return <div data-slot="calendar" ref={rootRef} className={cn(rootClassName)} {...restRoot} />;
+          const wrapperRef = React.useRef<HTMLDivElement>(null);
+          const [portalContainer, setPortalContainer] = React.useState<HTMLElement | null>(null);
+
+          React.useEffect(() => {
+            if (wrapperRef.current) {
+              setPortalContainer(wrapperRef.current);
+            }
+          }, []);
+
+          return (
+            <div ref={wrapperRef} className="relative h-fit w-fit">
+              <div data-slot="calendar" ref={rootRef} className={cn(rootClassName)} {...restRoot} />
+              <WarnDialog open={warnOpen ?? false} onOpenChange={setWarnOpen} container={portalContainer} />
+            </div>
+          );
         },
         Chevron: ({ className: chevronClassName, orientation, ...restChevron }) => {
           if (orientation === 'left') {
@@ -136,6 +161,10 @@ function Calendar({
           return (
             <Select
               value={String(value)}
+              width="fit"
+              className="min-w-0"
+              optionsClassName="min-w-0 text-center"
+              isContentfitTriggerWidth
               onValueChange={handleValueChange}
               options={
                 !options || options.length === 0
@@ -183,6 +212,8 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
         'data-[selected-single=true]:bg-juiPrimary',
         'data-[selected-single=true]:rounded-full',
         'data-[selected-single=true]:hover:bg-juiPrimary/70',
+        'data-[selected-single=true]:w-9/10',
+        'data-[selected-single=true]:h-9/10',
         'light:data-[selected-single=true]:text-white',
 
         // ✅ range 상태
@@ -192,10 +223,14 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
 
         'data-[range-start=true]:bg-juiPrimary',
         'data-[range-start=true]:hover:bg-juiPrimary/70',
+        'data-[range-start=true]:w-9/10',
+        'data-[range-start=true]:h-9/10',
         'light:data-[range-start=true]:text-white',
 
         'data-[range-end=true]:bg-juiPrimary',
         'data-[range-end=true]:hover:bg-juiPrimary/70',
+        'data-[range-end=true]:w-9/10',
+        'data-[range-end=true]:h-9/10',
         'light:data-[range-end=true]:text-white',
 
         // ✅ 오늘 날짜
@@ -210,16 +245,18 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
 
         // ✅ 레이아웃 및 기본 스타일
         'flex',
+        'flex-col',
         'border-0',
         'aspect-square',
         'size-auto',
-        'w-full',
-        'min-w-(--cell-size)',
-        'flex-col',
+        'w-4/5',
+        'h-4/5',
+        'm-auto',
         'gap-1',
         'leading-none',
         'font-normal',
-        'hover:bg-current/10',
+        'hover:font-bold',
+        'hover:bg-current/20',
         'hover:rounded-full',
         'hover:border-0 focus-visible:border-1',
 
@@ -235,6 +272,29 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
       )}
       {...props}
     />
+  );
+}
+
+function WarnDialog({
+  open,
+  onOpenChange,
+  container,
+}: {
+  open: boolean;
+  onOpenChange?: (open: boolean) => void;
+  container: HTMLElement | null;
+}) {
+  return (
+    <DialogRoot open={open} onOpenChange={onOpenChange}>
+      <DialogPortal container={container}>
+        <DialogOverlay className="absolute" />
+        <DialogContent className="absolute top-[50%] left-[50%] z-50 translate-x-[-50%] translate-y-[-50%]">
+          <DialogTitle className="sr-only">title</DialogTitle>
+          <DialogDescription className="sr-only">description</DialogDescription>
+          <div>선택</div>
+        </DialogContent>
+      </DialogPortal>
+    </DialogRoot>
   );
 }
 
