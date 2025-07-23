@@ -16,6 +16,7 @@ type InputProps = Omit<React.ComponentProps<'input'>, 'size'> &
     iconRight?: ComponentType<IconProps>;
     error?: boolean;
     helperText?: ReactNode;
+    step?: number;
   };
 
 function Input({
@@ -25,8 +26,10 @@ function Input({
   iconLeft,
   iconRight,
   disabled,
+  underline,
   value,
   defaultValue,
+  step,
   error,
   helperText,
   onChange,
@@ -42,7 +45,7 @@ function Input({
   });
 
   const IconLeft = iconLeft;
-  const IconRitght = iconRight;
+  const IconRight = iconRight;
 
   const preventInvalidInput = (event: ChangeEvent<HTMLInputElement>) => {
     event.target.value = sanitizeNumber(event.target.value);
@@ -50,7 +53,7 @@ function Input({
 
   return (
     <div>
-      <div className={cn('relative group min-h-7', className)}>
+      <div className={cn('relative group min-h-7', underline !== 'none' && 'bg-juiBackground-input', className)}>
         {IconLeft && (
           <span
             className={cn(
@@ -75,8 +78,10 @@ function Input({
               hasIconLeft,
               hasIconRight,
               disabled,
+              underline,
               className,
             }),
+            'w-full',
           )}
           {...props}
         />
@@ -92,18 +97,18 @@ function Input({
           </span>
         )}
 
-        {IconRitght && (
+        {IconRight && (
           <span
             className={cn(
               'absolute right-3 top-1/2 -translate-y-1/2 text-current pointer-events-none',
               disabled && 'opacity-50 cursor-not-allowed',
             )}>
-            <IconRitght size="small" />
+            <IconRight size="small" />
           </span>
         )}
 
         {type === 'number' && !hasIconRight && !error && (
-          <NumberStepper inputValue={inputValue} handleChange={handleChange} />
+          <NumberStepper inputValue={inputValue} step={step} handleChange={handleChange} disabled={disabled} />
         )}
       </div>
 

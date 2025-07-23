@@ -46,6 +46,7 @@ export default function TabsPage() {
       <div className="bg-juiBackground-paper w-full p-4 h-[2000px] overflow-auto">
         <h1 className="text-4xl font-bold">TABS LAYOUT</h1>
         <div className="flex flex-col gap-4">
+          <Input underline="secondary" className="w-50" placeholder="text" />
           <Calendar
             mode="single"
             selected={date}

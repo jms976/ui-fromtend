@@ -1,9 +1,9 @@
-import { useRef, useState, type ComponentProps, type ComponentType } from 'react';
+import { type ComponentProps, type ComponentType, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { Input, inputVariants } from '@common/ui';
-import { CalendarIcon, LockIcon, type IconProps } from '@common/ui/icons';
+import { CalendarIcon, type IconProps, LockIcon } from '@common/ui/icons';
 
 const ICON_MAP: Record<string, ComponentType<IconProps> | undefined> = {
   none: undefined,
@@ -11,82 +11,84 @@ const ICON_MAP: Record<string, ComponentType<IconProps> | undefined> = {
   calendar: CalendarIcon,
 };
 
+const sizeOptions = Object.keys(inputVariants.variants.size);
+const typeOptions = ['text', 'number', 'color'];
+const underlineOptions = Object.keys(inputVariants.variants.underline);
+
 const meta: Meta<typeof Input> = {
-  title: 'UI/Input',
+  title: 'UI/Form/Input/Input',
   component: Input,
-  argTypes: {
-    type: {
-      control: 'select',
-      options: ['text', 'number', 'color'],
-      table: {
-        defaultValue: { summary: 'text' },
-      },
-    },
-    size: {
-      control: 'select',
-      options: Object.keys(inputVariants.variants.size),
-      description: 'Input의 높이를 조절합니다.',
-      table: {
-        defaultValue: { summary: 'default' },
-      },
-    },
-    error: {
-      control: 'boolean',
-      description: '에러 상태일 경우 테두리가 빨간색으로 표시됩니다.',
-      table: {
-        defaultValue: { summary: 'false' },
-      },
-    },
-    disabled: {
-      control: 'boolean',
-      description: '비활성화 상태 여부입니다.',
-      table: {
-        defaultValue: { summary: 'false' },
-      },
-    },
-    hasIconLeft: {
-      table: {
-        disable: true,
-      },
-    },
-    hasIconRight: {
-      table: {
-        disable: true,
-      },
-    },
-    iconLeft: {
-      description: '왼쪽 아이콘 표시 여부입니다. (none: 없음, 이외 아이콘 선택)',
-      table: {
-        disable: true,
-      },
-    },
-    iconRight: {
-      description: '오른쪽 아이콘 표시 여부입니다. (none: 없음, 이외 아이콘 선택)',
-      table: {
-        disable: true,
-      },
-    },
-    placeholder: {
-      control: 'text',
-      description: 'Input placeholder입니다.',
-    },
-    className: {
-      control: 'text',
-      description: '추가 Tailwind 클래스입니다.(eg. w-3xl)',
-    },
-  },
   args: {
     error: false,
     disabled: false,
     iconLeft: undefined,
     iconRight: undefined,
-    placeholder: '입력해 주세요',
+    placeholder: '내용을 입력하세요',
+    size: 'default',
+    type: 'text',
+  },
+  argTypes: {
+    type: {
+      control: 'select',
+      options: typeOptions,
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'text' } },
+      description: 'Input의 타입을 설정합니다.',
+    },
+    size: {
+      control: 'select',
+      options: sizeOptions,
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'default' } },
+      description: 'Input의 높이를 조절합니다.',
+    },
+    underline: {
+      control: 'select',
+      options: underlineOptions,
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'none' } },
+      description: 'Input의 outline 대신 underline으로 포커스시 강조 됩니다.',
+    },
+    error: {
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+      description: '에러 상태일 경우 테두리가 빨간색으로 표시됩니다.',
+    },
+    disabled: {
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+      description: '비활성화 상태 여부입니다.',
+    },
+    hasIconLeft: {
+      table: { disable: true },
+    },
+    hasIconRight: {
+      table: { disable: true },
+    },
+    iconLeft: {
+      table: { disable: true },
+      description: '왼쪽 아이콘 표시 여부입니다. (none: 없음, 이외 아이콘 선택)',
+    },
+    iconRight: {
+      table: { disable: true },
+      description: '오른쪽 아이콘 표시 여부입니다. (none: 없음, 이외 아이콘 선택)',
+    },
+    placeholder: {
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: '내용을 입력하세요' } },
+      description: 'Input placeholder 입니다.',
+    },
+    className: {
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: '' } },
+      description: '추가 Tailwind 클래스입니다.(eg. w-3xl)',
+    },
   },
   parameters: {
     docs: {
       description: {
-        component:
-          'Tailwind Variants 기반 Input 컴포넌트입니다.<br /> 넓이는 기본 부모의 100% 이고, 넓이를 조절하려면 className 을 이용합니다.',
+        component: [
+          'Tailwind Variants 기반 Input 컴포넌트의 문서입니다.',
+          '다양한 타입과 크기의 입력 필드를 제공합니다.',
+          '넓이는 기본 부모의 100% 이고, 넓이를 조절하려면 className 을 이용합니다.',
+        ].join('<br/>'),
       },
     },
   },
@@ -341,7 +343,7 @@ export const IconControl: StoryObj<InputStoryProps> = {
   parameters: {
     docs: {
       description: {
-        story: '스토리북 컨트롤을 통해 아이콘을 동적으로 변경하여 Input에 적용하는 예시입니다.',
+        story: 'Storybook 컨트롤을 통해 아이콘을 동적으로 변경하여 Input에 적용하는 예시입니다.',
       },
       disable: true,
     },
@@ -362,7 +364,47 @@ export const IconControl: StoryObj<InputStoryProps> = {
   },
 };
 
-const ControllComp = ({ value: initialValue, onChange, onBlur, ...args }: ComponentProps<typeof Input>) => {
+export const UnderlineVariants: Story = {
+  argTypes: {
+    underline: { control: false, table: { disable: true } },
+    placeholder: { control: false, table: { disable: true } },
+    size: { control: false, table: { disable: true } },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`underline` 속성의 값에 따라 Input 하단에 강조선이 어떻게 렌더링되는지 확인할 수 있는 예시입니다. 기본적으로 `outline` 대신 포커스 시 underline이 강조됩니다.',
+      },
+    },
+  },
+  render: (args) => {
+    return (
+      <div className="flex flex-col gap-6">
+        {underlineOptions.map((underlineValue) => (
+          <div key={underlineValue} className="flex flex-col gap-2">
+            <span className="text-sm font-bold">underline: {underlineValue}</span>
+            <div className="w-72">
+              <Input
+                {...args}
+                underline={underlineValue as keyof typeof inputVariants.variants.underline}
+                placeholder={`underline: ${underlineValue}`}
+              />
+            </div>
+          </div>
+        ))}
+        <div key="error" className="flex flex-col gap-2">
+          <span className="text-sm font-bold">underline: With Error</span>
+          <div className="w-72">
+            <Input {...args} underline="primary" error placeholder={`underline: With Error`} />
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
+const ControlledComp = ({ value: initialValue, onChange, onBlur, ...args }: ComponentProps<typeof Input>) => {
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -429,5 +471,5 @@ export const Controlled: Story = {
       disable: true,
     },
   },
-  render: (args) => <ControllComp {...args} />,
+  render: (args) => <ControlledComp {...args} />,
 };

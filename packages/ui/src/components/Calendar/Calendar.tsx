@@ -12,11 +12,6 @@ import { DialogPortal, DialogContent, DialogClose } from '@radix-ui/react-dialog
 import { cn } from '../../lib/utils';
 import { dialogVariants } from '../Dialog/dialogVariants';
 
-// "tailwindCSS.experimental.classRegex": [
-//   "[a-zA-Z0-9_-]*(?i:[cC][lL][aA][sS][sS][nN][aA][mM][eE])[a-zA-Z0-9_-]*=\\{?['\"`]([^'\"`}]*)['\"`]\\}?",
-//   "(?:cn|clsx|cx)\\(([^)]*)\\)"
-// ],
-// 이거 회사꺼 설정
 function Calendar({
   className,
   classNames,
