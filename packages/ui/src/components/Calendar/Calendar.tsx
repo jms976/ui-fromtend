@@ -100,11 +100,11 @@ function Calendar({
           '[&:nth-child(7)]:text-juiPrimary', // 토요일 (index 6 → 7번째 child)
           defaultClassNames.weekday,
         ),
-        week: cn('flex w-full mt-2', defaultClassNames.week),
+        week: cn('flex w-full mt-2 rounded-md overflow-hidden', defaultClassNames.week),
         week_number_header: cn('select-none w-(--cell-size)', defaultClassNames.week_number_header),
         week_number: cn('text-[0.8rem] select-none text-juiText-secondary', defaultClassNames.week_number),
         day: cn(
-          'flex relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-full [&:last-child[data-selected=true]_button]:rounded-r-full group/day aspect-square select-none',
+          'flex relative w-full h-full p-0 text-center group/day aspect-square select-none',
           'group-data-[mode=single]/calendar:rounded-full',
           'group-data-[mode=multiple]/calendar:rounded-full',
           defaultClassNames.day,
