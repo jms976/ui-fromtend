@@ -4,13 +4,19 @@ import * as React from 'react';
 import { DayButton, DayPicker, getDefaultClassNames, type DateRange } from 'react-day-picker';
 import { ko } from 'date-fns/locale';
 
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@common/ui/icons';
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, XIcon } from '@common/ui/icons';
 import { Button, buttonVariants } from '../Button';
 import { Select } from '../Select';
-import { DialogDescription, DialogOverlay, DialogRoot } from '@common/ui/components/Dialog';
-import { DialogPortal, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
+import { DialogDescription, DialogOverlay, DialogRoot, DialogTitle, DialogFooter } from '@common/ui/components/Dialog';
+import { DialogPortal, DialogContent, DialogClose } from '@radix-ui/react-dialog';
 import { cn } from '../../lib/utils';
+import { dialogVariants } from '../Dialog/dialogVariants';
 
+// "tailwindCSS.experimental.classRegex": [
+//   "[a-zA-Z0-9_-]*(?i:[cC][lL][aA][sS][sS][nN][aA][mM][eE])[a-zA-Z0-9_-]*=\\{?['\"`]([^'\"`}]*)['\"`]\\}?",
+//   "(?:cn|clsx|cx)\\(([^)]*)\\)"
+// ],
+// 이거 회사꺼 설정
 function Calendar({
   className,
   classNames,
@@ -19,14 +25,17 @@ function Calendar({
   buttonVariant = 'transparent',
   formatters,
   components,
-  warnOpen,
-  setWarnOpen,
+  dialogOpen,
+  onDialogConfirm,
+  onDialogCancel,
+  dialogContent,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
-} & {
-  warnOpen?: boolean;
-  setWarnOpen?: (open: boolean) => void;
+  dialogOpen?: boolean;
+  onDialogConfirm?: () => void;
+  onDialogCancel?: () => void;
+  dialogContent?: React.ReactNode;
 }) {
   const defaultClassNames = getDefaultClassNames();
 
@@ -126,7 +135,14 @@ function Calendar({
           return (
             <div ref={wrapperRef} className="relative h-fit w-fit">
               <div data-slot="calendar" ref={rootRef} className={cn(rootClassName)} {...restRoot} />
-              <WarnDialog open={warnOpen ?? false} onOpenChange={setWarnOpen} container={portalContainer} />
+              <ConfirmationDialog
+                open={dialogOpen ?? false}
+                onOpenChange={(open) => !open && onDialogCancel?.()}
+                container={portalContainer}
+                onConfirm={onDialogConfirm}
+                onCancel={onDialogCancel}
+                dialogContent={dialogContent}
+              />
             </div>
           );
         },
@@ -275,23 +291,42 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
   );
 }
 
-function WarnDialog({
+function ConfirmationDialog({
   open,
   onOpenChange,
   container,
+  onConfirm,
+  onCancel,
+  dialogContent,
 }: {
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   container: HTMLElement | null;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  dialogContent?: React.ReactNode;
 }) {
+  const { closeButton } = dialogVariants();
+
   return (
     <DialogRoot open={open} onOpenChange={onOpenChange}>
       <DialogPortal container={container}>
         <DialogOverlay className="absolute" />
-        <DialogContent className="absolute top-[50%] left-[50%] z-50 translate-x-[-50%] translate-y-[-50%]">
+        <DialogContent className="absolute flex flex-col justify-center min-h-34 top-[50%] left-[50%] z-50 min-w-60 max-w-68 translate-x-[-50%] translate-y-[-50%] rounded-lg bg-juiBackground-popover p-4 shadow-lg">
           <DialogTitle className="sr-only">title</DialogTitle>
-          <DialogDescription className="sr-only">description</DialogDescription>
-          <div>선택</div>
+          <DialogDescription className="overflow-hidden break-all break-words text-center">
+            {dialogContent}
+          </DialogDescription>
+          <DialogClose className={cn(closeButton(), 'top-2.5 right-2.5 focus:ring-0 focus:ring-offset-0')}>
+            <XIcon />
+            <span className="sr-only">close</span>
+          </DialogClose>
+          <DialogFooter className="p-0 flex justify-end space-x-2">
+            <Button onClick={onCancel}>취소</Button>
+            <Button variant="primary" onClick={onConfirm}>
+              확인
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </DialogPortal>
     </DialogRoot>

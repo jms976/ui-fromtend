@@ -16,7 +16,31 @@ export default function TabsPage() {
       to: new Date(2025, 6, 19),
     });
 
-    const [validateOpen, setValidateOpen] = useState(false);
+    const [confirmationRequest, setConfirmationRequest] = useState<Date | null>(null);
+
+    const handleSelect = (selectedDate: Date | undefined) => {
+      if (selectedDate) {
+        const needsConfirmation = selectedDate < new Date();
+
+        if (needsConfirmation) {
+          setConfirmationRequest(selectedDate);
+        } else {
+          setDate(selectedDate);
+          setConfirmationRequest(null);
+        }
+      }
+    };
+
+    const handleConfirm = () => {
+      if (confirmationRequest) {
+        setDate(confirmationRequest);
+        setConfirmationRequest(null);
+      }
+    };
+
+    const handleCancel = () => {
+      setConfirmationRequest(null);
+    };
 
     return (
       <div className="bg-juiBackground-paper w-full p-4 h-[2000px] overflow-auto">
@@ -27,14 +51,12 @@ export default function TabsPage() {
             selected={date}
             defaultMonth={date}
             numberOfMonths={2}
-            onSelect={() => {
-              setValidateOpen(true);
-
-              return;
-            }}
-            warnOpen={validateOpen}
-            setWarnOpen={setValidateOpen}
             className="rounded-lg border shadow-sm"
+            onSelect={handleSelect}
+            dialogOpen={confirmationRequest !== null}
+            onDialogConfirm={handleConfirm}
+            onDialogCancel={handleCancel}
+            dialogContent="과거 날짜를 선택하셨습니다."
           />
           <Calendar
             mode="single"
