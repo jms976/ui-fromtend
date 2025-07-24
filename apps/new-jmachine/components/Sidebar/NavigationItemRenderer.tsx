@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  SidebarCollasibleGroup,
+  SidebarCollapsibleGroup,
   SidebarGroupContent,
   SidebarMenuSub,
   SidebarMenuSubItem,
@@ -48,7 +48,7 @@ function renderGroupItem({ item, depth, isHover }: { item: MenuItemType; depth: 
   const Icon = depth > 0 ? TagIcon : BellIcon;
 
   return (
-    <SidebarCollasibleGroup
+    <SidebarCollapsibleGroup
       key={item.code}
       collapsibleTitle={item.title}
       collapsibleIcon={Icon}
@@ -81,7 +81,7 @@ function renderGroupItem({ item, depth, isHover }: { item: MenuItemType; depth: 
           <NavigationItemRenderer items={item.children!} depth={depth + 1} isHover={isHover} />
         </SidebarMenuSub>
       </SidebarGroupContent>
-    </SidebarCollasibleGroup>
+    </SidebarCollapsibleGroup>
   );
 }
 

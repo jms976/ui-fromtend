@@ -175,7 +175,7 @@ function Calendar({
               width="fit"
               className="min-w-0"
               optionsClassName="min-w-0 text-center"
-              isContentfitTriggerWidth
+              isContentFitTriggerWidth
               onValueChange={handleValueChange}
               options={
                 !options || options.length === 0

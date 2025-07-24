@@ -29,7 +29,7 @@ const dropdownMenuItemVariants = tv({
   },
 });
 
-type OptionItem = {
+export type OptionItem = {
   type?: 'item' | 'check';
   label: string;
   value: string;
