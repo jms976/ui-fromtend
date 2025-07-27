@@ -1,8 +1,19 @@
 'use client';
 
-import { Button, Calendar, DateRange, Input, Popover, Separator, Skeleton, Tabs, type TabItemType } from '@common/ui';
-import { useState } from 'react';
-import { PlayIcon } from '@common/ui/icons';
+import {
+  Button,
+  Calendar,
+  DateRange,
+  Input,
+  Popover,
+  ScrollArea,
+  Separator,
+  Skeleton,
+  Tabs,
+  type TabItemType,
+} from '@common/ui';
+import { Fragment, useState } from 'react';
+import { AlignCenterVerticalIcon, PhoneIcon, PlayIcon } from '@common/ui/icons';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
@@ -42,11 +53,26 @@ export default function TabsPage() {
       setConfirmationRequest(null);
     };
 
+    const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
+
     return (
       <div className="bg-juiBackground-paper w-full p-4 h-[2000px] overflow-auto">
         <h1 className="text-4xl font-bold">TABS LAYOUT</h1>
         <div className="flex flex-col gap-4">
           <Input underline="secondary" className="w-50" placeholder="text" />
+          <AlignCenterVerticalIcon />
+          <PhoneIcon />
+          <ScrollArea className="h-72 w-48 rounded-md border">
+            <div className="p-4">
+              <h4 className="mb-4 text-sm leading-none font-medium">Tags</h4>
+              {tags.map((tag) => (
+                <Fragment key={tag}>
+                  <div className="text-sm">{tag}</div>
+                  <Separator className="my-2" />
+                </Fragment>
+              ))}
+            </div>
+          </ScrollArea>
           <Calendar
             mode="single"
             selected={date}
