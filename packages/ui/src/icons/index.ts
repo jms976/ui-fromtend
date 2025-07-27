@@ -60,6 +60,7 @@ export { PaperClipIcon } from './Icon/PaperClipIcon';
 export { PhoneIcon } from './Icon/PhoneIcon';
 export { PieChartIcon } from './Icon/PieChartIcon';
 export { PlayIcon } from './Icon/PlayIcon';
+export { PointerOffIcon } from './Icon/PointerOffIcon';
 export { PlusCircleIcon } from './Icon/PlusCircleIcon';
 export { PlusIcon } from './Icon/PlusIcon';
 export { PlusSquareIcon } from './Icon/PlusSquareIcon';

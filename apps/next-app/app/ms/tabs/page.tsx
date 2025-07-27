@@ -13,7 +13,7 @@ import {
   type TabItemType,
 } from '@common/ui';
 import { Fragment, useState } from 'react';
-import { AlignCenterVerticalIcon, PhoneIcon, PlayIcon } from '@common/ui/icons';
+import { AlignCenterVerticalIcon, PhoneIcon, PlayIcon, PointerOffIcon } from '@common/ui/icons';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
@@ -62,6 +62,7 @@ export default function TabsPage() {
           <Input underline="secondary" className="w-50" placeholder="text" />
           <AlignCenterVerticalIcon />
           <PhoneIcon />
+          <PointerOffIcon />
           <ScrollArea className="h-72 w-48 rounded-md border">
             <div className="p-4">
               <h4 className="mb-4 text-sm leading-none font-medium">Tags</h4>
