@@ -219,6 +219,9 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
       data-range-middle={modifiers.range_middle}
       data-today={modifiers.today}
       className={cn(
+        // 버튼 색상 초기화
+        'text-inherit',
+
         // ✅ 선택 상태
         'data-[selected-single=true]:bg-juiPrimary',
         'data-[selected-single=true]:rounded-full',
