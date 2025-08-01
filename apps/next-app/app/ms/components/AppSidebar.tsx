@@ -1,31 +1,33 @@
 'use client';
 
 import {
-  SidebarRoot,
+  Button,
+  Progress,
+  SidebarCollapsibleGroup,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  Button,
-  SidebarInput,
-  SidebarMenuItem,
-  SidebarMenuAction,
   SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarMenuSkeleton,
   SidebarMenuSub,
-  SidebarMenuSubItem,
   SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarRoot,
   SidebarSeparator,
-  SidebarCollapsibleGroup,
 } from '@common/ui';
 import {
   BellIcon,
   EditIcon,
+  EyeIcon,
   FileIcon,
   HomeIcon,
   ListIcon,
@@ -261,7 +263,13 @@ export function AppSidebar() {
                 </SidebarMenuAction>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton>
+                <SidebarMenuButton
+                  hoverCardContents={
+                    <div className="w-20 h-12 p-2 flex flex-col gap-2 bg-juiPrimary">
+                      <Progress />
+                      <EyeIcon />
+                    </div>
+                  }>
                   <LockIcon />
                   Action
                 </SidebarMenuButton>
@@ -329,7 +337,7 @@ export function AppSidebar() {
 
         <SidebarSeparator />
         {/* Collapsible 그룹 */}
-        <SidebarCollapsibleGroup collapsibleTitle="Collapsible" groupTitle="Collasible 사이드바">
+        <SidebarCollapsibleGroup collapsibleTitle="Collapsible" groupTitle="Collapsible 사이드바">
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -357,9 +365,9 @@ export function AppSidebar() {
         </SidebarCollapsibleGroup>
 
         <SidebarSeparator />
-        {/* collasible 서브 그룹 */}
+        {/* collapsible 서브 그룹 */}
         <SidebarGroup className="pb-0">
-          <SidebarGroupLabel>Collasible 서브 그룹 사이드바</SidebarGroupLabel>
+          <SidebarGroupLabel>Collapsible 서브 그룹 사이드바</SidebarGroupLabel>
         </SidebarGroup>
         {subData.navMain.map((item, index) => (
           <SidebarCollapsibleGroup

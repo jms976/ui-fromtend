@@ -3,19 +3,20 @@
 import {
   Button,
   Calendar,
+  CalendarTime,
   DateRange,
   Input,
   Popover,
-  ScrollArea,
   Separator,
   Skeleton,
   Tabs,
   type TabItemType,
 } from '@common/ui';
-import { Fragment, useState } from 'react';
-import { AlignCenterVerticalIcon, CalendarClockIcon, PhoneIcon, PlayIcon, PointerOffIcon } from '@common/ui/icons';
+import { useLayoutEffect, useState } from 'react';
+import { PlayIcon, StarIcon } from '@common/ui/icons';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { cn } from '@common/ui/lib/utils';
 
 export default function TabsPage() {
   function ScenarioList(props: { scenarioId: number }) {
@@ -53,39 +54,52 @@ export default function TabsPage() {
       setConfirmationRequest(null);
     };
 
-    const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
+    const [dateTime, setDateTime] = useState<Date | undefined>(undefined);
+
+    useLayoutEffect(() => {
+      if (dateTime) {
+        console.warn(dateTime);
+      }
+    }, [dateTime]);
 
     return (
-      <div className="bg-juiBackground-paper w-full p-4 h-[2000px] overflow-auto">
+      <div className="bg-juiBackground-paper w-full p-4 overflow-auto">
         <h1 className="text-4xl font-bold">TABS LAYOUT</h1>
         <div className="flex flex-col gap-4">
           <Input underline="secondary" className="w-50" placeholder="text" />
-          <AlignCenterVerticalIcon />
-          <PhoneIcon />
-          <PointerOffIcon />
-          <CalendarClockIcon />
-          <ScrollArea className="h-72 w-48 rounded-md border">
-            <div className="p-4">
-              <h4 className="mb-4 text-sm leading-none font-medium">Tags</h4>
-              {tags.map((tag) => (
-                <Fragment key={tag}>
-                  <div className="text-sm">{tag}</div>
-                  <Separator className="my-2" />
-                </Fragment>
-              ))}
-            </div>
-          </ScrollArea>
+          <CalendarTime
+            selected={dateTime}
+            onSelect={setDateTime}
+            className="rounded-lg border shadow-sm"
+            captionLayout="dropdown-months"
+            // numberOfMonths={2}
+          />
+
           <Calendar
             mode="single"
             selected={date}
             defaultMonth={date}
             numberOfMonths={2}
             className="rounded-lg border shadow-sm"
+            showOutsideDays={false}
             onSelect={handleSelect}
             dialogOpen={confirmationRequest !== null}
             onDialogConfirm={handleConfirm}
             onDialogCancel={handleCancel}
             dialogContent="과거 날짜를 선택하셨습니다."
+            components={{
+              Chevron: ({ className: chevronClassName, orientation, ...restChevron }) => {
+                if (orientation === 'left') {
+                  return <StarIcon className={cn('size-4', chevronClassName)} {...restChevron} />;
+                }
+
+                if (orientation === 'right') {
+                  return <StarIcon className={cn('size-4', chevronClassName)} {...restChevron} />;
+                }
+
+                return <StarIcon className={cn('size-4', chevronClassName)} {...restChevron} />;
+              },
+            }}
           />
           <Calendar
             mode="single"
@@ -93,6 +107,7 @@ export default function TabsPage() {
             defaultMonth={date}
             numberOfMonths={2}
             onSelect={setDate}
+            disabled={[{ before: new Date(2025, 6, 1), after: new Date(2025, 6, 10) }]}
             className="rounded-lg border shadow-sm"
             captionLayout="dropdown-months"
           />

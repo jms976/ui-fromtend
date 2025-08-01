@@ -114,3 +114,5 @@ export { SunIcon } from './Icon/SunIcon';
 export { MoonIcon } from './Icon/MoonIcon';
 export { SunMoonIcon } from './Icon/SunMoonIcon';
 export { CalendarClockIcon } from './Icon/CalendarClockIcon';
+export { ToggleLeftIcon } from './Icon/ToggleLeftIcon';
+export { ToggleRightIcon } from './Icon/ToggleRightIcon';

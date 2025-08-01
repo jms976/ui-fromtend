@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import {
   Button,
@@ -13,6 +13,7 @@ import {
   Checkbox,
   Popover,
   RadioGroup,
+  RangeDatePicker,
   Select,
   Separator,
   Skeleton,
@@ -20,6 +21,7 @@ import {
   Switch,
   useConfirmDialog,
 } from '@common/ui';
+import { Link2Icon } from 'lucide-react';
 
 export default function BoxPages() {
   const otpRef = useRef(null);
@@ -41,11 +43,62 @@ export default function BoxPages() {
     { label: 'Kiwi', value: 'kiwi' },
   ];
 
+  const [range, setRange] = useState<{ start?: Date; end?: Date }>({
+    start: new Date(2025, 6, 1),
+    end: new Date(2025, 6, 7),
+  });
+
   return (
-    <div className="flex flex-col gap-4 p-4 h-full overflow-auto">
+    <div className="flex flex-col gap-4 p-4">
       <div className="h-9">
         <h1 className="text-4xl font-bold">BOX LAYOUT</h1>
       </div>
+      <RangeDatePicker
+        defaultRange={{
+          start: new Date(2025, 6, 2),
+          end: new Date(2025, 6, 18),
+        }}
+        onRangeChange={(newRange) => {
+          console.warn('비제어 선택된 날짜 범위:', newRange);
+        }}
+        minRangeDays={10}
+        maxRangeDays={30}
+        isConfrimAlert={false}
+        startPlaceholder="시작 날짜 선택"
+      />
+      <RangeDatePicker
+        range={range}
+        onRangeChange={(newRange) => {
+          console.warn('선택된 날짜 범위:', newRange);
+          setRange(newRange);
+        }}
+        minRangeDays={10}
+        maxRangeDays={30}
+        // isArrow
+        // numberOfMonths={2}
+        delimiter={<Link2Icon />}
+        // direction="vertical"
+        // label={{
+        //   start: '시작날짜',
+        //   end: <Switch />,
+        //   // labelDirection: 'side',
+        // }}
+        // oppositeSign={{
+        //   start: { show: true },
+        //   end: { show: false },
+        // }}
+        // customConfirmAlert={({ condDate, type }) => {
+        //   console.warn(condDate, type);
+
+        //   return (
+        //     <div>
+        //       {type} {condDate?.toLocaleDateString()} error
+        //     </div>
+        //   );
+        // }}
+        // isConfrimAlert={false}
+      />
+
       <Switch defaultChecked />
       <Switch variant="secondary" defaultChecked />
       <Switch variant="error" defaultChecked />

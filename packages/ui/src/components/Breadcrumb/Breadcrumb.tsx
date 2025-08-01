@@ -15,10 +15,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
 } from '@common/ui';
-import { ChevronRightIcon, MoreHorizontalFilledIcon } from '../../icons';
-import { createCondensedArray } from './hooks/useCondensedArray';
+import { ChevronRightIcon, MoreHorizontalFilledIcon } from '@common/ui/icons';
+import { createCondensedArray } from '@common/ui/components/Breadcrumb/hooks/useCondensedArray';
 import { isSafeArray, toSafeTypeValue } from '@common/ui/components/Breadcrumb/helpers';
-import { type OptionItem } from '../DropdownMenu/DropdownMenu';
+import { type OptionItem } from '@common/ui/components/DropdownMenu/DropdownMenu';
 
 export type EllipsisPositionType = (typeof VALID_ELLIPSIS_POSITIONS)[number];
 export const VALID_ELLIPSIS_POSITIONS = ['start', 'center', 'end'] as const;

@@ -65,8 +65,10 @@ type SelectProps = ComponentProps<typeof SelectRoot> &
     selectRef?: Ref<string>;
     error?: boolean;
     helperText?: ReactNode;
+    isTriggerIcon?: boolean;
     className?: string;
     optionsClassName?: string;
+    itemClassName?: string;
   };
 
 function Select({
@@ -81,16 +83,18 @@ function Select({
   onValueChange,
   className,
   optionsClassName,
+  itemClassName,
   selectRef,
   error,
   helperText,
+  isTriggerIcon,
   ...props
 }: SelectProps) {
   const isNumberWidth = typeof width === 'number';
-  const [interanlValue, setInternalValue] = useState(props.defaultValue ?? '');
+  const [internalValue, setInternalValue] = useState(props.defaultValue ?? '');
 
   const isControlled = controlledValue !== undefined;
-  const currentValue = isControlled ? controlledValue : interanlValue;
+  const currentValue = isControlled ? controlledValue : internalValue;
 
   // 비제어 선택값
   useImperativeHandle(selectRef, () => currentValue);
@@ -111,6 +115,7 @@ function Select({
           ref={ref}
           size={size}
           style={isNumberWidth ? { width: `100%` } : undefined}
+          isTriggerIcon={isTriggerIcon}
           className={cn(!isNumberWidth && selectVariaints({ width, error }), className)}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
@@ -144,7 +149,8 @@ function Select({
                       value={item.value}
                       disabled={item.disabled}
                       size={size}
-                      isSelectIndicator={isSelectIndicator}>
+                      isSelectIndicator={isSelectIndicator}
+                      className={itemClassName}>
                       {item.label}
                     </SelectItem>
                   );
@@ -167,7 +173,8 @@ function Select({
               value={item.value}
               disabled={item.disabled}
               size={size}
-              isSelectIndicator={isSelectIndicator}>
+              isSelectIndicator={isSelectIndicator}
+              className={itemClassName}>
               {item.label}
             </SelectItem>
           );
