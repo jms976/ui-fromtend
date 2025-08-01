@@ -6,6 +6,7 @@ import {
   type ComponentProps,
   type ReactNode,
   type Ref,
+  type ChangeEvent,
   useMemo,
   useCallback,
 } from 'react';
@@ -140,8 +141,10 @@ function DatePicker({
   );
 
   // input blur 시 유효한 날짜면 onChange 또는 내부 상태 업데이트
-  const handleInputBlur = () => {
+  const handleInputBlur = (e: ChangeEvent<HTMLInputElement>) => {
     const parsed = parse(inputValue, timeTypeFormat, new Date());
+
+    setInputValue(e.target.value);
 
     if (isNaN(parsed.getTime())) {
       setIsError(true);

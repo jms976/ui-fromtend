@@ -228,14 +228,14 @@ export function useDateTimeInputFormatter({
 
       newValue = `${year}-${month}-${day} ${formattedHour}:`;
     } else if (minuteJustCompleted) {
-      const formattedHour = hour.length === 1 ? `0${hour}` : hour;
+      const formattedHour = isSingleDigitHour ? `0${hour}:` : hour;
       const formattedMinute = isSingleDigitMinute ? `0${singleMinuteDigit}` : minute;
 
       newValue = `${year}-${month}-${day} ${formattedHour}:${formattedMinute}`;
       if (withTimeType === 'second' && !raw.endsWith(':')) newValue += ':';
     } else if (secondJustCompleted) {
-      const formattedHour = hour.length === 1 ? `0${hour}` : hour;
-      const formattedMinute = minute.length === 1 ? `0${minute}` : minute;
+      const formattedHour = isSingleDigitHour ? `0${hour}:` : hour;
+      const formattedMinute = isSingleDigitMinute ? `0${minute}:` : minute;
 
       newValue = `${year}-${month}-${day} ${formattedHour}:${formattedMinute}:${second}`;
     } else {
@@ -286,17 +286,18 @@ export function useDateTimeInputFormatter({
       newPos += formatted.length - raw.length;
     }
 
+    setInputValue?.(formatted);
+    setIsError?.(!isValidFormattedDateTime(formatted));
+
     requestAnimationFrame(() => {
       setTimeout(() => {
         e.target.setSelectionRange(newPos, newPos);
       }, 1);
     });
-
-    setInputValue?.(formatted);
-    setIsError?.(!isValidFormattedDateTime(formatted));
   };
 
   return {
     handleInputChange,
+    getMaxFormattedLength,
   };
 }
