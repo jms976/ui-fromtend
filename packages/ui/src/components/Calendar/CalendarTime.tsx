@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 
 import { ClockIcon } from '@common/ui/icons';
 import { Calendar } from './Calendar';
-import { Select, Separator } from '..';
+import { Select, Separator } from '../../components';
 import { useTimeChangeHandler } from './hooks/useTimeChangeHandler';
 import { cn } from '@common/ui/lib/utils';
 
