@@ -71,7 +71,7 @@ function DisabledFromToCalendarStory(props: React.ComponentProps<typeof Calendar
 // 6. 다이얼로그 열림 상태 관리 컴포넌트
 function DialogCalendarStory(props: React.ComponentProps<typeof Calendar>) {
   const [selected, setSelected] = React.useState<Date | undefined>(undefined);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   return (
     <div>

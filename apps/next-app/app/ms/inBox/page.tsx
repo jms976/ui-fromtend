@@ -82,7 +82,7 @@ export default function BoxPages() {
             underline: 'none',
             iconLeft: EyeIcon,
           }}
-          disabled={[{ before: new Date(2024, 6, 1), after: new Date(2024, 6, 10) }]}
+          disabledCalendar={[{ before: new Date(2024, 6, 1), after: new Date(2024, 6, 10) }]}
         />
 
         <DatePicker

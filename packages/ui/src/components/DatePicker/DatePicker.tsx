@@ -3,16 +3,16 @@
 import {
   useState,
   useImperativeHandle,
-  useMemo,
-  useCallback,
   type ComponentProps,
   type ReactNode,
   type Ref,
   type ChangeEvent,
+  useMemo,
+  useCallback,
 } from 'react';
 import { format, parse } from 'date-fns';
 
-import { Button, Calendar, CalendarTime, Input, Popover } from '..';
+import { Button, Calendar, CalendarTime, Input, Popover } from '../../components';
 import { CalendarIcon, CalendarClockIcon } from '@common/ui/icons';
 import { useConfirmDialog } from '@common/ui/hooks';
 import { useDateTimeInputFormatter } from './hooks/useDateTimeInputFormatter';
@@ -39,7 +39,8 @@ type DatePickerBaseProps = {
     ComponentProps<typeof Calendar>,
     'mode' | 'dialogOpen' | 'onDialogConfirm' | 'onDialogCancel' | 'dialogContent' | 'disabled'
   >;
-  disabled?: ComponentProps<typeof Calendar>['disabled'];
+  disabledCalendar?: ComponentProps<typeof Calendar>['disabled'];
+  disabled?: boolean;
   inputProps?: Omit<ComponentProps<typeof Input>, 'iconProp' | 'placeholder'>;
   placeholder?: ComponentProps<typeof Input>['placeholder'];
   timeType?: TimeType;
@@ -69,12 +70,13 @@ function DatePicker({
   classNames,
   popoverProps,
   calendarProps,
-  disabled,
+  disabledCalendar,
   onConditionRequestCallback,
   conditionContent = (selectedDate) => `${selectedDate?.toDateString()} 선택하시겠습니까?`,
   inputProps,
   timeType = 'date',
   placeholder,
+  disabled = false,
 }: DatePickerProps) {
   const timeTypeFormatMap: Record<TimeType, string> = {
     date: 'yyyy-MM-dd',
@@ -217,16 +219,24 @@ function DatePicker({
               iconRight={defaultIconRight}
               iconLeft={iconLeft}
               iconProps={{
-                onClick: () => setOpen((prev) => !prev),
+                onClick: (e) => {
+                  if (disabled) e.preventDefault();
+
+                  if (!disabled) {
+                    setOpen((prev) => !prev);
+                  }
+                },
                 className: cn(
                   'cursor-pointer',
+                  disabled && 'cursor-not-allowed',
                   open && 'bg-current/20 p-1 size-6 rounded-lg',
                   open && !iconLeft && 'translate-x-1 ',
-                  open && iconLeft && '-translate-x-1g',
+                  open && iconLeft && '-translate-x-1',
                 ),
               }}
               placeholder={placeholder ?? timeTypeFormat}
               {...restInputProps}
+              disabled={disabled}
               error={isError || restInputProps.error}
               helperText={restInputProps.helperText || (isError && '올바른 날짜를 입력해 주세요')}
             />
@@ -244,7 +254,7 @@ function DatePicker({
           className={cn(calendarClassName)}
           captionLayout="dropdown"
           numberOfMonths={numberOfMonths}
-          disabled={disabled}
+          disabled={disabledCalendar}
           {...(onConditionRequestCallback && confirmationRequest !== undefined
             ? {
                 dialogOpen: true,
