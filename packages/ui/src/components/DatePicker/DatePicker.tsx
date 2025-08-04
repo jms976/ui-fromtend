@@ -3,12 +3,12 @@
 import {
   useState,
   useImperativeHandle,
+  useMemo,
+  useCallback,
   type ComponentProps,
   type ReactNode,
   type Ref,
   type ChangeEvent,
-  useMemo,
-  useCallback,
 } from 'react';
 import { format, parse } from 'date-fns';
 
@@ -107,7 +107,7 @@ function DatePicker({
 
   const [confirmationRequest, setConfirmationRequest] = useState<Date | undefined>(undefined);
 
-  const { handleInputChange } = useDateTimeInputFormatter({
+  const { handleInputChange, handleKeyDown, handleClick } = useDateTimeInputFormatter({
     initDate: isInitDate ? undefined : date,
     setInputValue,
     setIsError,
@@ -210,8 +210,9 @@ function DatePicker({
               value={inputValue}
               onChange={handleInputChange}
               onBlur={handleInputBlur}
-              onClick={(e) => e.preventDefault()}
+              onClick={handleClick}
               onFocus={() => setOpen(false)}
+              onKeyDown={(e) => handleKeyDown(e)(inputValue)}
               className={cn('[&::-webkit-calendar-picker-indicator]:hidden', inputClassName)}
               iconRight={defaultIconRight}
               iconLeft={iconLeft}
