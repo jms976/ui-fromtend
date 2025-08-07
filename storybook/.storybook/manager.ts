@@ -4,7 +4,7 @@ import { create } from '@storybook/theming';
 const theme = create({
   base: 'light',
   brandTitle: 'MS Design System',
-  brandImage: 'images/ms-emoji.png',
+  brandImage: 'images/msui-logo.webp',
   brandUrl: '/',
   brandTarget: '_self',
 });
