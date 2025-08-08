@@ -45,7 +45,10 @@ const meta: Meta<typeof RangeDatePicker> = {
     },
     isConfrimAlert: {
       control: { type: 'boolean' },
-      description: '날짜 선택 시 확인 다이얼로그 표시 여부를 설정합니다.',
+      description: [
+        '날짜 선택 시 조건 상관 없이 확인 다이얼로그 표시 여부를 설정합니다.',
+        '** 조건: start, end 범위 및 maxRangeDays 보다 좁을때, minRangeDays 보다 넓을때',
+      ].join('<br />'),
     },
     customConfirmAlert: {
       control: false,
@@ -72,6 +75,22 @@ const meta: Meta<typeof RangeDatePicker> = {
     onRangeChange: {
       control: false,
       description: 'range 콜백 함수 입니다.',
+    },
+    isShowTimeSlide: {
+      control: { type: 'boolean' },
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+      description: 'timeType이 `Date`가 아닐때, 시간 설정 영역에서 Slider 컴포넌트로 시간을 설정할 수 있게 합니다.',
+    },
+    numberOfMonths: {
+      control: 'number',
+      table: {
+        type: { summary: 'number' },
+        defaultValue: { summary: '1' },
+      },
+      description: '한 번에 렌더링할 달(month)의 개수를 지정합니다.',
     },
   },
   parameters: {
@@ -158,14 +177,32 @@ export const NumberMonth: Story = {
       start: today,
       end: plus5days,
     },
-    calendarProps: {
-      numberOfMonths: 2,
-    },
+    numberOfMonths: 2,
   },
   parameters: {
     docs: {
       description: {
         story: 'numberOfMonths을 활용하여 2개의 캘린더를 보여주는 예시입니다.',
+      },
+    },
+  },
+};
+
+export const TimeSlider: Story = {
+  name: 'Time Slider',
+  args: {
+    timeType: 'minute',
+    defaultRange: {
+      start: today,
+      end: plus5days,
+    },
+    numberOfMonths: 2,
+    isShowTimeSlide: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '`isShowTimeSlide` prop을 통해 시간 설정에 Time Slider를 추가 할 수 있습니다.',
       },
     },
   },
@@ -208,7 +245,7 @@ export const WithCustomAlert: Story = {
     docs: {
       description: {
         story:
-          '날짜 선택 시 기본 알림 대신 커스텀 확인 다이얼로그를 사용하는 예시입니다. (시작일을 오늘보다 2일 이후로 선택해 보세요)',
+          '날짜 선택 시 기본 알림 대신 커스텀 확인 다이얼로그를 사용하는 예시입니다.(시작일을 오늘보다 2일 이후로 선택해 보세요)',
       },
     },
   },
