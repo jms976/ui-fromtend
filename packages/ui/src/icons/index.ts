@@ -116,3 +116,6 @@ export { SunMoonIcon } from './Icon/SunMoonIcon';
 export { CalendarClockIcon } from './Icon/CalendarClockIcon';
 export { ToggleLeftIcon } from './Icon/ToggleLeftIcon';
 export { ToggleRightIcon } from './Icon/ToggleRightIcon';
+export { PlayArrowIcon } from './Icon/PlayArrowIcon';
+export { OpenFolderFilledIcon } from './Icon/OpenFolderFilledIcon';
+export { CloseFolderFilledIcon } from './Icon/CloseFolderFilledIcon';
