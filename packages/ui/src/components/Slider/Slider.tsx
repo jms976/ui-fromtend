@@ -175,7 +175,7 @@ function Slider({
   return (
     <div
       data-slot="slider-wrapper"
-      className={cn('relative pointer-events-none z-0', isHorizontal ? 'w-full' : 'h-full', wrapperClassName)}
+      className={cn('relative flex pointer-events-none z-0', isHorizontal ? 'w-full' : 'h-full', wrapperClassName)}
       data-orientation={orientation}
       style={{
         ...(marks
@@ -353,11 +353,19 @@ function Slider({
                         <span
                           key={idx}
                           data-slot="mark-label"
+                          onClick={() => {
+                            const newValues = [...currentValues.slice(0, -1), markValue];
+
+                            handleValueChange(newValues);
+                            handleValueCommit(newValues);
+                          }}
                           className={cn(
                             'absolute block',
                             isHorizontal ? '-translate-x-1/2' : '-translate-y-1/2',
                             'w-max text-xs whitespace-nowrap',
                             isActiveMark && 'font-bold',
+                            'pointer-events-auto cursor-pointer',
+                            'hover:font-bold',
                             labelClass,
                           )}
                           style={labelStyle}>
